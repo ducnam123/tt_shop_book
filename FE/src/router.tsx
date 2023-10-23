@@ -17,7 +17,7 @@ import Home from "./components/layout/Home";
 
 // admin
 import LayoutAdmin from "./components/layout/LayoutAdmin";
-import AdminProductAdd from "./pages/admin/product/add";
+import AdminProductAdd from "./pages/admin/product/AddProduct";
 import Dashboard from "./pages/admin/Dashboard";
 
 // login _ signup
@@ -27,23 +27,22 @@ import Categoryes from "./pages/admin/categories/Categoryes";
 import IndexProduct from "./pages/admin/product";
 import EditCategory from "./pages/admin/categories/Edit";
 import User from "./pages/admin/user/User";
+import DetailUser from "./pages/admin/user/DetailUser";
 
 // đăng nhập
-const userData: any = localStorage.getItem("userData");
-const users = JSON.parse(userData);
 
-const PrivateRoute = (saveUser: any) => {
-  const userRole: any = saveUser["saveUser"]["user"]["role"] && "admin";
-  console.log(userRole);
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (userRole === "admin") {
-      navigate("/admin/dashboard");
-    }
-  }, [saveUser]);
+// const PrivateRoute = (saveUser: any) => {
+//   const userRole: any = saveUser["saveUser"]["user"]["role"] && "admin";
+//   console.log(userRole);
+//   const navigate = useNavigate();
+//   useEffect(() => {
+//     if (userRole === "admin") {
+//       navigate("/admin/dashboard");
+//     }
+//   }, [saveUser]);
 
-  return userRole === "admin" ? <Outlet /> : <Navigate to="/user/login" />;
-};
+//   return userRole === "admin" ? <Outlet /> : <Navigate to="/user/login" />;
+// };
 
 export const router = createBrowserRouter([
   {
@@ -59,20 +58,24 @@ export const router = createBrowserRouter([
 
   {
     path: "/admin",
-    element: <PrivateRoute saveUser={users} />,
+    // element: <PrivateRoute isAuth={users} />,
     children: [
       {
         element: <LayoutAdmin />,
         children: [
           { path: "dashboard", element: <Dashboard /> },
-          { path: "product", element: <IndexProduct /> },
 
           // categories
           { path: "category", element: <Categoryes /> },
           { path: "category/edit/:_id", element: <EditCategory /> },
 
+          // product
+          { path: "product", element: <IndexProduct /> },
+          { path: "product/add", element: <AdminProductAdd /> },
+
           // user
           { path: "user", element: <User /> },
+          { path: "user/edit/:id", element: <DetailUser /> },
         ],
       },
     ],

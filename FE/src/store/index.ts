@@ -1,8 +1,3 @@
-// api
-import productApi, { productReducer } from "../../src/api/product";
-import categoryApi, { categoryReducer } from "../../src/api/categories";
-import authApi, { authReducer } from "../../src/api/auth"; // đăng ký đăng nhập
-import { combineReducers, configureStore, Middleware } from "@reduxjs/toolkit";
 import {
   FLUSH,
   PAUSE,
@@ -13,13 +8,20 @@ import {
   persistReducer,
   persistStore,
 } from "redux-persist";
-
 import storage from "redux-persist/lib/storage";
+
+// api
+import productApi, { productReducer } from "../../src/api/product";
+import categoryApi, { categoryReducer } from "../../src/api/categories";
+// đăng ký đăng nhập
+import authApi, { authReducer } from "../../src/api/auth";
+
+import { combineReducers, configureStore, Middleware } from "@reduxjs/toolkit";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart"],
+  whitelist: ["cart", "auth"], // để lưu thông tin, tài khoản ,cart ... vào state
 };
 
 const rootReducer = combineReducers({

@@ -1,16 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IAuth } from "../interfaces/auth";
 
-interface AuthSignup {
-  email: string;
-  password: string;
-  name: string;
-  confirmPassword: string;
-}
-interface AuthSignin {
-  email: string;
-  password: string;
-}
 const authApi = createApi({
   reducerPath: "auth",
   tagTypes: ["User"],
@@ -23,9 +13,24 @@ const authApi = createApi({
       providesTags: ["User"],
     }),
 
+    removeUsers: builder.mutation<void, number | string>({
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: "DELETE",
+      }),
+    }),
+
+    editUsers: builder.mutation<IAuth, IAuth>({
+      query: (users) => ({
+        url: `/users/${users._id}`,
+        method: "PATCH",
+        body: users,
+      }),
+    }),
+
     signup: builder.mutation<
       { message: string; accessToken: string; user: {} },
-      AuthSignup
+      IAuth
     >({
       query: (credentials) => ({
         url: "/signup",
@@ -35,7 +40,7 @@ const authApi = createApi({
     }),
     signin: builder.mutation<
       { message: string; accessToken: string; user: {} },
-      AuthSignin
+      IAuth
     >({
       query: (credentials) => ({
         url: "/signin",
@@ -46,7 +51,12 @@ const authApi = createApi({
   }),
 });
 
-export const { useSignupMutation, useSigninMutation, useGetUsersQuery } =
-  authApi;
+export const {
+  useSignupMutation,
+  useSigninMutation,
+  useGetUsersQuery,
+  useEditUsersMutation,
+  useRemoveUsersMutation,
+} = authApi;
 export const authReducer = authApi.reducer;
 export default authApi;

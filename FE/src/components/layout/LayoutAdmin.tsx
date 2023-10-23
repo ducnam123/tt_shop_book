@@ -13,6 +13,9 @@ import { Link, Outlet } from "react-router-dom";
 import type { MenuProps } from "antd";
 import { useNavigate } from "react-router-dom";
 
+// tài khoản - user
+import { useSelector } from "react-redux";
+
 const { Header, Sider, Content } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -34,12 +37,19 @@ function getItem(
 
 const LayoutAdmin = () => {
   const navigate = useNavigate();
+  // FIXME fix hiện tên tài khoản layoutAdmin header
+  // const auth = useSelector((state: any) => {
+  //   const users = state.auth.data.user;
+  //   return users;
+  // });
+
+  // const { name, role } = auth;
+
+  // console.log(name, role);
 
   // menu
   const onClick: MenuProps["onClick"] = (e) => {
     if (e.key === "5") {
-      console.log("đã thoát");
-      localStorage.removeItem("userData");
       navigate("/");
     } else {
       navigate("/");
@@ -51,14 +61,10 @@ const LayoutAdmin = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  // chuyển thông tin tài khoản sang javascript -> và lưu thông tin
-  const userData: any = localStorage.getItem("userData");
-  // const user = JSON.parse(userData);
-  // const userName: any = user["user"]["role"];
-  const userName = "hihi";
+
   // menu
   const items: MenuItem[] = [
-    getItem(`Tài khoản: ${userName}`, "sub2", <AiOutlineUser />, [
+    getItem(`Tài khoản:`, "sub2", <AiOutlineUser />, [
       getItem("Đăng xuất", "5"),
       getItem("Trang chủ", "6"),
     ]),

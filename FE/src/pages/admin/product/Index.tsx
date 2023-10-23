@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
+import { Navigate } from "react-router-dom";
 
 interface Item {
   key: string;
@@ -9,7 +10,7 @@ interface Item {
 }
 
 const originData: Item[] = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 10; i++) {
   originData.push({
     key: i.toString(),
     name: `Edward ${i}`,
@@ -36,7 +37,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   ...restProps
 }) => {
   const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-
   return (
     <td {...restProps}>
       {editing ? (
@@ -175,6 +175,11 @@ const Index: React.FC = () => {
 
   return (
     <Form form={form} component={false}>
+      <a href="/admin/product/add">
+        <button className="bg-red-500 p-3 rounded-lg hover:bg-blue-500 hover:text-white mb-8">
+          Thêm sản phẩm
+        </button>
+      </a>
       <Table
         components={{
           body: {

@@ -1,7 +1,7 @@
 // shader
-import Footer from "./shader/Footer";
-import Header from "./shader/Header";
-import Card from "./shader/Card";
-import Detail from "./shader/Detail";
+import Footer from "./Footer";
+import Header from "./Header";
+import Card from "./Card";
+import Detail from "./Detail";
 
 export { Footer, Header, Card, Detail };

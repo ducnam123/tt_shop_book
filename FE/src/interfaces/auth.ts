@@ -10,4 +10,5 @@ export interface IAuth {
   avatar?: string;
   isActive?: boolean;
   createdAt?: string | number;
+  confirmPassword?: string;
 }

@@ -62,14 +62,18 @@ const columns: ColumnsType<IAuth> = [
     key: "operation",
     fixed: "right",
     width: 100,
-    render: () => <a>Chi tiết</a>,
+    render: (dataUser: any) => (
+      <a href={`/admin/user/edit/${dataUser.key}`}>
+        <button className="bg-blue-500 p-2 rounded-xl text-white hover:bg-red-500">
+          Chi tiết
+        </button>
+      </a>
+    ),
   },
 ];
 
 const User: React.FC = () => {
   const { data: dataUser } = useGetUsersQuery();
-
-  console.log(dataUser);
 
   const dataSource = useMemo(() => {
     if (dataUser) {

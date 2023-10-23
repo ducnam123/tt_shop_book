@@ -88,7 +88,6 @@ export const signin = async (req, res) => {
   }
 };
 
-
 export const getUser = async (req, res) => {
   try {
     const user = await User.find()
@@ -101,6 +100,48 @@ export const getUser = async (req, res) => {
     return res.json(user)
   } catch (error) {
     res.status(400).json({
+      message: error.message
+    })
+  }
+}
+
+export const removeUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete({ _id: req.params.id })
+    return res.status(200).json({
+      message: "Xóa thành công",
+      user
+    })
+  } catch (error) {
+    return res.status(401).json({
+      message: error.message
+    })
+  }
+}
+
+export const editUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true })
+    return res.status(200).json({
+      message: "sửa sản phẩm thành công",
+      user
+    })
+  } catch (error) {
+    return res.status(401).json({
+      message: error.message
+    })
+  }
+}
+
+export const getUsers = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+    return res.status(200).json({
+      message: 'Sản phẩm:',
+      user
+    })
+  } catch (error) {
+    return res.status(401).json({
       message: error.message
     })
   }

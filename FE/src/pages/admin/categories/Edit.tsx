@@ -6,12 +6,8 @@ import { pause } from "../../../utils/pause";
 import { Button, Form, Input, Skeleton } from "antd";
 import { useEffect } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { ICategory } from "../../../interfaces/categorys";
 import { useNavigate, useParams } from "react-router-dom";
-
-type FieldType = {
-  id?: string;
-  name?: string;
-};
 
 const EditCategory = () => {
   const { _id } = useParams<{
@@ -63,11 +59,11 @@ const EditCategory = () => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <Form.Item<FieldType> label="Id" name="id">
+        <Form.Item<ICategory> label="Id" name="id">
           <Input disabled placeholder={_id} />
         </Form.Item>
 
-        <Form.Item<FieldType>
+        <Form.Item<ICategory>
           label="Tên sản phẩm"
           name="name"
           rules={[

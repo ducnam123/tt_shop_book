@@ -3,18 +3,17 @@ import { Button, Form, Input, message } from "antd";
 import { IAuth } from "../../interfaces/auth";
 import { useSigninMutation } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
-// biến để lưu thông tin khi đăng nhập
-export const setUserData: any = (userData: any) => {
-  return {
-    type: "SET_USER_DATA",
-    payload: userData,
-  };
-};
+
+//  lưu thông tin đăng nhập
+import { useDispatch } from "react-redux";
 
 const SignIn = () => {
   const [signin, { error }] = useSigninMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
+
+  // FIXME làm lưu thông tin tài khoản vào redux
+  const dispatch = useDispatch();
 
   const onFinish = async (values: any) => {
     const user = await signin({
@@ -22,9 +21,13 @@ const SignIn = () => {
       password: values.password,
     })
       .unwrap()
-      .then((userData) => {
-        localStorage.setItem("userData", JSON.stringify(userData));
-        navigate("/admin/category");
+      .then(() => {
+        // localStorage.setItem("userData", JSON.stringify(userData));
+        // console.log(userData.user.role);
+      })
+
+      .then(() => {
+        // navigate("/");
       });
 
     if (error) {

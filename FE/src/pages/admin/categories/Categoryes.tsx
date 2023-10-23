@@ -9,7 +9,11 @@ import {
 import { Link } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
+import { useSelector } from "react-redux";
+
 const Categoryes = () => {
+  const user = useSelector((state: any) => state.user);
+  console.log(user);
   const { data: categoryData } = useGetCategoriesQuery();
   const [removeCategory, { isLoading: isRemoveLoading }] =
     useRemoveCategoryMutation();
@@ -82,7 +86,7 @@ const Categoryes = () => {
     },
   ];
 
-  // tìm kiếm
+  // search
   //TODO
   const [searchText, setSearchText] = useState<string>("");
   const filteredDataSource = dataSource?.filter((record: any) =>
