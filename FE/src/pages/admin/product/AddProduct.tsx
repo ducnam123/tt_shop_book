@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 
 const onFinish = (values: any) => {
@@ -15,7 +14,7 @@ type FieldType = {
   remember?: string;
 };
 
-const AdminProductAdd: React.FC = () => (
+const AdminProductAdd = () => (
   <Form
     name="basic"
     labelCol={{ span: 8 }}

@@ -27,18 +27,18 @@ const SignIn = () => {
       })
 
       .then(() => {
-        // navigate("/");
+        // navigate("/admin/user");
       });
-
-    if (error) {
-      if ("data" in error) {
-        messageApi.open({
-          type: "error",
-          content: error?.data?.message,
-        });
-      }
-    }
   };
+
+  if (error) {
+    if ("data" in error) {
+      messageApi.open({
+        type: "error",
+        content: error?.data?.message,
+      });
+    }
+  }
 
   return (
     <div

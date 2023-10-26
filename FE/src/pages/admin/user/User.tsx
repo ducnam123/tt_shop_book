@@ -2,9 +2,9 @@ import React, { useMemo } from "react";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useGetUsersQuery } from "../../../api/auth";
-import { IAuth } from "@/interfaces/auth";
+import { IAuth } from "../../../interfaces/auth";
 
-const columns: ColumnsType<IAuth> = [
+const columns: ColumnsType<any> = [
   {
     title: "Id",
     width: 50,
@@ -106,10 +106,13 @@ const User: React.FC = () => {
       );
     }
   }, [dataUser]);
+  console.log("🚀 ~ file: User.tsx:110 ~ dataSource ~ dataSource:", dataSource);
 
   return (
-    <div>
-      <h1 className="font-bold text-2xl my-10">Thông tin chi tiết tài khoản</h1>
+    <div className="h-screen">
+      <h1 className="font-bold text-2xl my-10">
+        Thông tin tất cả các tài khoản
+      </h1>
       <Table
         columns={columns}
         dataSource={dataSource}

@@ -10,17 +10,16 @@ import { ICategory } from "../../../interfaces/categorys";
 import { useNavigate, useParams } from "react-router-dom";
 
 const EditCategory = () => {
-  const { _id } = useParams<{
-    _id: string;
+  const { id } = useParams<{
+    id: string;
   }>();
 
   const [updateCategory, { isLoading: isUpdateLoading }] =
     useUpdateCategoryMutation();
   const { data: categoryData, isLoading: isGetCategoryLoading } =
-    useGetCategoryByIdQuery(_id || "");
+    useGetCategoryByIdQuery(id || "");
   const navigate = useNavigate();
   const [form] = Form.useForm();
-
   useEffect(() => {
     // đồng bộ dữ liệu từ API fill vào form
     form.setFieldsValue({
@@ -29,7 +28,7 @@ const EditCategory = () => {
   }, [categoryData]);
 
   const onFinish = (values: any) => {
-    const updateValues = { ...values, _id };
+    const updateValues = { ...values, id };
 
     updateCategory(updateValues)
       .unwrap()
@@ -60,7 +59,7 @@ const EditCategory = () => {
         autoComplete="off"
       >
         <Form.Item<ICategory> label="Id" name="id">
-          <Input disabled placeholder={_id} />
+          <Input disabled placeholder={id} />
         </Form.Item>
 
         <Form.Item<ICategory>

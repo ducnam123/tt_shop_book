@@ -39,9 +39,9 @@ const categoryApi = createApi({
     updateCategory: builder.mutation<ICategory, ICategory>({
       query: (category) => {
         const categoryCopy = { ...category };
-        delete categoryCopy._id;
+        delete categoryCopy.id;
         return {
-          url: `/categories/${category._id}`,
+          url: `/categories/${category.id}`,
           method: "PATCH",
           body: categoryCopy,
         };

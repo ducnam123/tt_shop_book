@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Form, Input, message } from "antd";
 import { IAuth } from "../../interfaces/auth";
 import { useSignupMutation } from "../../api/auth";
@@ -19,16 +18,16 @@ const SignUp = () => {
       .then(() => {
         navigate("/user/login");
       });
-
-    if (error) {
-      if ("data" in error) {
-        messageApi.open({
-          type: "error",
-          content: error?.data?.message,
-        });
-      }
-    }
   };
+
+  if (error) {
+    if ("data" in error) {
+      messageApi.open({
+        type: "error",
+        content: error?.data?.message,
+      });
+    }
+  }
 
   return (
     <div

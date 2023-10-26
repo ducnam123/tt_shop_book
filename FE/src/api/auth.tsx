@@ -8,8 +8,14 @@ const authApi = createApi({
     baseUrl: `http://localhost:8080/api`,
   }),
   endpoints: (builder) => ({
+    // quản lí tài khoản
     getUsers: builder.query<IAuth[], void>({
       query: () => `users`,
+      providesTags: ["User"],
+    }),
+
+    getUserById: builder.query<IAuth, string | number>({
+      query: (id: string | number) => `/users/${id}`,
       providesTags: ["User"],
     }),
 
@@ -22,14 +28,15 @@ const authApi = createApi({
 
     editUsers: builder.mutation<IAuth, IAuth>({
       query: (users) => ({
-        url: `/users/${users._id}`,
+        url: `/users/${users.id}`,
         method: "PATCH",
         body: users,
       }),
     }),
 
+    // đăng nhập - đăng ký
     signup: builder.mutation<
-      { message: string; accessToken: string; user: {} },
+      { message: string; accessToken: string; user: any },
       IAuth
     >({
       query: (credentials) => ({
@@ -39,7 +46,7 @@ const authApi = createApi({
       }),
     }),
     signin: builder.mutation<
-      { message: string; accessToken: string; user: {} },
+      { message: string; accessToken: string; user: any },
       IAuth
     >({
       query: (credentials) => ({
@@ -57,6 +64,7 @@ export const {
   useGetUsersQuery,
   useEditUsersMutation,
   useRemoveUsersMutation,
+  useGetUserByIdQuery,
 } = authApi;
 export const authReducer = authApi.reducer;
 export default authApi;

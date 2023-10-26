@@ -21,7 +21,7 @@ const Categoryes = () => {
 
   const dataSource = useMemo(() => {
     if (categoryData) {
-      return categoryData.map(({ _id: id, name }: ICategory, index) => ({
+      return categoryData.map(({ id: id, name }: ICategory, index) => ({
         key: id,
         name,
         index,

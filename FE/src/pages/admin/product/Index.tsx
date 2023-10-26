@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
-import { Navigate } from "react-router-dom";
 
 interface Item {
   key: string;

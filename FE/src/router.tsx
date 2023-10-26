@@ -1,13 +1,7 @@
-import { useEffect, useState } from "react";
-import {
-  createBrowserRouter,
-  Navigate,
-  useNavigate,
-  Outlet,
-} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 
 // component
-import { Card, Detail, Footer } from "./components";
+import { Card, Detail } from "./components";
 
 // notpage
 import NotPage from "./components/NotPage";
@@ -24,7 +18,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
 import Categoryes from "./pages/admin/categories/Categoryes";
-import IndexProduct from "./pages/admin/product";
+import IndexProduct from "./pages/admin/product/Index";
 import EditCategory from "./pages/admin/categories/Edit";
 import User from "./pages/admin/user/User";
 import DetailUser from "./pages/admin/user/DetailUser";
@@ -67,7 +61,7 @@ export const router = createBrowserRouter([
 
           // categories
           { path: "category", element: <Categoryes /> },
-          { path: "category/edit/:_id", element: <EditCategory /> },
+          { path: "category/edit/:id", element: <EditCategory /> },
 
           // product
           { path: "product", element: <IndexProduct /> },

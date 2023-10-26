@@ -1,5 +1,6 @@
 export interface IAuth {
-  _id?: string;
+  _id?: string | number;
+  id?: string | number;
   name?: string;
   email?: string;
   password?: string;
@@ -11,4 +12,6 @@ export interface IAuth {
   isActive?: boolean;
   createdAt?: string | number;
   confirmPassword?: string;
+  user?: any;
+  columns?: any;
 }

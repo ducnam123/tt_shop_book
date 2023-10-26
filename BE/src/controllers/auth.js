@@ -122,8 +122,8 @@ export const removeUser = async (req, res) => {
 export const editUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true })
+
     return res.status(200).json({
-      message: "sửa sản phẩm thành công",
       user
     })
   } catch (error) {
@@ -137,7 +137,6 @@ export const getUsers = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
     return res.status(200).json({
-      message: 'Sản phẩm:',
       user
     })
   } catch (error) {
