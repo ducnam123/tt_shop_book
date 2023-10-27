@@ -1,199 +1,201 @@
-import React, { useState } from "react";
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
+import { Button, Popconfirm, Table, message, Input } from "antd";
+import { useMemo, useState } from "react";
 
-interface Item {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-}
+import { Link } from "react-router-dom";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
-const originData: Item[] = [];
-for (let i = 0; i < 10; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  });
-}
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: "number" | "text";
-  record: Item;
-  index: number;
-  children: React.ReactNode;
-}
+// api
+import {
+  useGetProductsQuery,
+  useRemoveProductMutation,
+} from "../../../api/product";
+import { IBooks } from "../../../interfaces/book";
 
-const EditableCell: React.FC<EditableCellProps> = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
+// chính
+const Index = () => {
+  const user = useSelector(
+    (state: any) => state.user
+  ); /* chưa xong đang sửa lỗi */
+  const [removeBook, { isLoading: isRemoveLoading }] =
+    useRemoveProductMutation();
+  const [messageApi, contextHolder] = message.useMessage();
+  const { data: BooksData } = useGetProductsQuery();
 
-const Index: React.FC = () => {
-  const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
-  const [editingKey, setEditingKey] = useState("");
-
-  const isEditing = (record: Item) => record.key === editingKey;
-
-  const edit = (record: Partial<Item> & { key: React.Key }) => {
-    form.setFieldsValue({ name: "", age: "", address: "", ...record });
-    setEditingKey(record.key);
-  };
-
-  const cancel = () => {
-    setEditingKey("");
-  };
-
-  const save = async (key: React.Key) => {
-    try {
-      const row = (await form.validateFields()) as Item;
-
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setData(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey("");
-      }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
+  const dataSource = useMemo(() => {
+    if (BooksData) {
+      return BooksData["docs"].map(
+        (
+          {
+            _id: id,
+            name,
+            price,
+            original_price,
+            author,
+            title,
+            description,
+            images,
+          }: IBooks,
+          index: number
+        ) => ({
+          key: id,
+          name,
+          index,
+          price,
+          original_price,
+          author,
+          title,
+          description,
+          images,
+        })
+      );
     }
+    return [];
+  }, [BooksData]);
+
+  const confirm = (id: number | string) => {
+    removeBook(id)
+      .unwrap()
+      .then(() => {
+        messageApi.open({
+          type: "success",
+          content: "delete successfully",
+        });
+      });
   };
 
   const columns = [
     {
-      title: "name",
+      title: "Id",
+      key: "index",
+      dataIndex: "index",
+      width: 50,
+      render: (index: number) => `${index + 1}`,
+    },
+    {
+      title: "Name",
       dataIndex: "name",
-      width: "25%",
+      key: "name",
+      width: "20%",
       editable: true,
     },
     {
-      title: "age",
-      dataIndex: "age",
-      width: "15%",
+      title: "price",
+      dataIndex: "price",
+      key: "price",
+      width: "10%",
       editable: true,
     },
     {
-      title: "address",
-      dataIndex: "address",
-      width: "40%",
+      title: "original_price",
+      dataIndex: "original_price",
+      key: "original_price",
+      width: "10%",
       editable: true,
     },
     {
-      title: "operation",
-      dataIndex: "operation",
-      render: (_: any, record: Item) => {
-        const editable = isEditing(record);
-        console.log(editable);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={() => save(record.key)}
-              style={{ marginRight: 8 }}
-            >
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <div className="flex gap-2">
-            <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => edit(record)}
-            >
-              Edit
-            </Typography.Link>
-
-            <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => edit(record)}
-            >
-              xóa
-            </Typography.Link>
+      title: "author",
+      dataIndex: "author",
+      key: "author",
+      width: "10%",
+      editable: true,
+    },
+    {
+      title: "description",
+      dataIndex: "description",
+      key: "description",
+      width: "10%",
+      editable: true,
+    },
+    {
+      title: "title",
+      dataIndex: "title",
+      key: "title",
+      width: "10%",
+      editable: true,
+    },
+    {
+      title: "images",
+      dataIndex: "images",
+      key: "images",
+      width: "10%",
+      editable: true,
+      render: (images: any) => {
+        console.log("Images data:", images); // Kiểm tra dữ liệu
+        return (
+          <div>
+            {images.map((image: any, index: any) => (
+              <img
+                key={index}
+                src={image.url}
+                alt={`Image${index}`}
+                style={{ maxWidth: "100px", maxHeight: "100px" }}
+              />
+            ))}
           </div>
         );
       },
     },
+
+    {
+      render: ({ key: id }: { key: number | string }) => (
+        <div className="flex space-x-2">
+          {contextHolder}
+          <Popconfirm
+            title="Bạn chắc muốn xóa chứ !"
+            description="Are you sure to delete this task?"
+            onConfirm={() => confirm(id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger>
+              {isRemoveLoading ? (
+                <AiOutlineLoading3Quarters className="animate-spin" />
+              ) : (
+                "Xóa"
+              )}
+            </Button>
+          </Popconfirm>
+
+          <Link to={`/admin/category/edit/${id}`}>
+            <Button type="primary" danger>
+              Sửa{" "}
+            </Button>
+          </Link>
+        </div>
+      ),
+    },
   ];
 
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record: Item) => ({
-        record,
-        inputType: col.dataIndex === "age" ? "number" : "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
+  // search
+  //TODO
+  const [searchText, setSearchText] = useState<string>("");
+  const filteredDataSource = dataSource?.filter((record: any) =>
+    Object.keys(record).some(
+      (key) =>
+        typeof record[key] === "string" &&
+        record[key].toLowerCase().includes(searchText.toLowerCase())
+    )
+  );
 
   return (
-    <Form form={form} component={false}>
-      <a href="/admin/product/add">
-        <button className="bg-red-500 p-3 rounded-lg hover:bg-blue-500 hover:text-white mb-8">
-          Thêm sản phẩm
-        </button>
-      </a>
-      <Table
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
-        bordered
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={{
-          onChange: cancel,
-        }}
-      />
-    </Form>
+    <div className="relative h-screen">
+      <div className="bg-red-500 py-3 max-w-[130px] text-center rounded-md my-2">
+        <a href="product/add">
+          <button>thêm sản phẩm</button>
+        </a>
+      </div>
+
+      <div className="flex items-center gap-44">
+        {/* search */}
+        <Input.Search
+          placeholder="Tìm kiếm sản phẩm"
+          onSearch={(value: string) => setSearchText(value)}
+          style={{ marginBottom: 16 }}
+        />
+      </div>
+      <Table dataSource={filteredDataSource} columns={columns} />
+    </div>
   );
 };
 

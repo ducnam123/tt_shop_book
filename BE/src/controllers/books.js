@@ -1,12 +1,7 @@
 import Book from "../models/books";
-import joi from "joi";
 import Category from "../models/category";
+import { bookSchema } from "../schemas/books";
 
-const bookSchema = joi.object({
-  name: joi.string().required(),
-  price: joi.number().required(),
-  categoryId: joi.string().required(),
-});
 
 export const getAll = async (req, res) => {
   const { _limit = 10, _sort = "createAt", _order = "asc", _page = 1 } = req.query;
@@ -62,7 +57,7 @@ export const create = async (req, res) => {
     // Thêm ObjectId vào thuộc tính products trong model Category
     await Category.findByIdAndUpdate(book.categoryId, {
       $addToSet: {
-        products: book._id,
+        books: book._id,
       },
     });
     if (book.length === 0) {

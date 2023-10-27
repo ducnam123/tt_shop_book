@@ -1,48 +1,48 @@
-import { IProduct } from "../interfaces/product";
+import { IBooks } from "../interfaces/book";
 import { pause } from "../utils/pause";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const productApi = createApi({
-  reducerPath: "product",
-  tagTypes: ["Product"],
+  reducerPath: "books",
+  tagTypes: ["Book"],
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
+    baseUrl: "http://localhost:8080/api",
     fetchFn: async (...arg) => {
       await pause(1000);
       return await fetch(...arg);
     },
   }),
   endpoints: (builder) => ({
-    getProducts: builder.query<IProduct[], void>({
-      query: () => `/products`,
-      providesTags: ["Product"],
+    getProducts: builder.query<IBooks[], void>({
+      query: () => `/books`,
+      providesTags: ["Book"],
     }),
-    getProductById: builder.query<IProduct, number | string>({
-      query: (id) => `/products/${id}`,
-      providesTags: ["Product"],
+    getProductById: builder.query<IBooks, number | string>({
+      query: (id) => `/books/${id}`,
+      providesTags: ["Book"],
     }),
     removeProduct: builder.mutation<void, number | string>({
       query: (id) => ({
-        url: `/products/${id}`,
+        url: `/books/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Product"],
+      invalidatesTags: ["Book"],
     }),
-    addProduct: builder.mutation<IProduct, IProduct>({
-      query: (product) => ({
-        url: `/products`,
+    addProduct: builder.mutation<IBooks, IBooks>({
+      query: (book) => ({
+        url: `/books`,
         method: "POST",
-        body: product,
+        body: book,
       }),
-      invalidatesTags: ["Product"],
+      invalidatesTags: ["Book"],
     }),
-    updateProduct: builder.mutation<IProduct, IProduct>({
-      query: (product) => ({
-        url: `/products/${product.id}`,
+    updateProduct: builder.mutation<IBooks, IBooks>({
+      query: (book) => ({
+        url: `/books/${book._id}`,
         method: "PATCH",
-        body: product,
+        body: book,
       }),
-      invalidatesTags: ["Product"],
+      invalidatesTags: ["Book"],
     }),
   }),
 });
