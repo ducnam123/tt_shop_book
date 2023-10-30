@@ -8,7 +8,7 @@ const productApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8080/api",
     fetchFn: async (...arg) => {
-      await pause(1000);
+      await pause(10);
       return await fetch(...arg);
     },
   }),
@@ -38,7 +38,7 @@ const productApi = createApi({
     }),
     updateProduct: builder.mutation<IBooks, IBooks>({
       query: (book) => ({
-        url: `/books/${book._id}`,
+        url: `/books/${book.id}`,
         method: "PATCH",
         body: book,
       }),

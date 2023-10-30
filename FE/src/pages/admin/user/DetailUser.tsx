@@ -124,7 +124,7 @@ const DetailUser = () => {
         layout="horizontal"
         disabled={componentDisabled}
         style={{ maxWidth: 600 }}
-        className="w-full h-screen"
+        className="w-full"
       >
         <div className="">
           <Form.Item<IAuth> label="Tên" name="name">

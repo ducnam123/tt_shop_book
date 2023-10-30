@@ -14,6 +14,7 @@ import { IBooks } from "../../../interfaces/book";
 
 // chính
 const Index = () => {
+  // lưu tài khoản đăng nhập
   const user = useSelector(
     (state: any) => state.user
   ); /* chưa xong đang sửa lỗi */
@@ -121,17 +122,10 @@ const Index = () => {
       width: "10%",
       editable: true,
       render: (images: any) => {
-        console.log("Images data:", images); // Kiểm tra dữ liệu
+        console.log(images);
         return (
           <div>
-            {images.map((image: any, index: any) => (
-              <img
-                key={index}
-                src={image.url}
-                alt={`Image${index}`}
-                style={{ maxWidth: "100px", maxHeight: "100px" }}
-              />
-            ))}
+            <img src={images[0].url} alt="" />
           </div>
         );
       },
@@ -157,9 +151,9 @@ const Index = () => {
             </Button>
           </Popconfirm>
 
-          <Link to={`/admin/category/edit/${id}`}>
+          <Link to={`/admin/product/edit/${id}`}>
             <Button type="primary" danger>
-              Sửa{" "}
+              Sửa
             </Button>
           </Link>
         </div>
@@ -179,8 +173,8 @@ const Index = () => {
   );
 
   return (
-    <div className="relative h-screen">
-      <div className="bg-red-500 py-3 max-w-[130px] text-center rounded-md my-2">
+    <div className="relative">
+      <div className="bg-red-500 py-2 max-w-[120px] text-center rounded-md my-2 text-white hover:bg-white hover:text-blue-500">
         <a href="product/add">
           <button>thêm sản phẩm</button>
         </a>

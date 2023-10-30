@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.4.2",
     "@cloudinary/react": "^1.11.2",
     "@reduxjs/toolkit": "^1.9.7",
     "antd": "^5.10.0",

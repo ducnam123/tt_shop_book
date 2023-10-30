@@ -109,7 +109,7 @@ const User: React.FC = () => {
   console.log("🚀 ~ file: User.tsx:110 ~ dataSource ~ dataSource:", dataSource);
 
   return (
-    <div className="h-screen">
+    <div className="">
       <h1 className="font-bold text-2xl my-10">
         Thông tin tất cả các tài khoản
       </h1>

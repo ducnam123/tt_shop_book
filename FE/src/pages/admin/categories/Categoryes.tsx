@@ -20,8 +20,8 @@ const Categoryes = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const dataSource = useMemo(() => {
-    if (categoryData) {
-      return categoryData.map(({ id: id, name }: ICategory, index) => ({
+    if (categoryData !== undefined) {
+      return categoryData.map(({ _id: id, name }: ICategory, index) => ({
         key: id,
         name,
         index,
@@ -31,6 +31,7 @@ const Categoryes = () => {
   }, [categoryData]);
 
   const confirm = (id: number | string) => {
+    console.log(id);
     removeCategory(id)
       .unwrap()
       .then(() => {
@@ -78,7 +79,7 @@ const Categoryes = () => {
 
           <Link to={`/admin/category/edit/${id}`}>
             <Button type="primary" danger>
-              Sửa{" "}
+              Sửa
             </Button>
           </Link>
         </div>
@@ -98,7 +99,7 @@ const Categoryes = () => {
   );
 
   return (
-    <div className="relative h-screen">
+    <div className="relative">
       <Add />
       <div className="flex items-center gap-44">
         {/* search */}

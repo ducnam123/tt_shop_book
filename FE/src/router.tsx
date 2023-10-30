@@ -22,6 +22,7 @@ import IndexProduct from "./pages/admin/product/Index";
 import EditCategory from "./pages/admin/categories/Edit";
 import User from "./pages/admin/user/User";
 import DetailUser from "./pages/admin/user/DetailUser";
+import EditBook from "./pages/admin/product/EditProduct";
 
 // đăng nhập
 
@@ -66,6 +67,7 @@ export const router = createBrowserRouter([
           // product
           { path: "product", element: <IndexProduct /> },
           { path: "product/add", element: <AdminProductAdd /> },
+          { path: "product/edit/:id", element: <EditBook /> },
 
           // user
           { path: "user", element: <User /> },

@@ -71,7 +71,7 @@ const LayoutAdmin = () => {
   ];
   // ------------------------------------------------------
   return (
-    <Layout className="">
+    <Layout className="h-screen">
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
