@@ -38,10 +38,11 @@ function getItem(
 const LayoutAdmin = () => {
   const navigate = useNavigate();
   // FIXME fix hiện tên tài khoản layoutAdmin header
-  // const auth = useSelector((state: any) => {
-  //   const users = state.auth.data.user;
-  //   return users;
-  // });
+  const auth = useSelector((state: any) => {
+    const users = state.auth?.data?.user;
+    return users;
+    console.log("🚀 ~ file: LayoutAdmin.tsx:44 ~ auth ~ users:", users);
+  });
 
   // const { name, role } = auth;
 

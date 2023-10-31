@@ -21,7 +21,7 @@ import { combineReducers, configureStore, Middleware } from "@reduxjs/toolkit";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart"], // để lưu thông tin, tài khoản ,cart ... vào state
+  whitelist: ["cart", "auth"], // để lưu thông tin, tài khoản ,cart ... vào state
 };
 
 const rootReducer = combineReducers({

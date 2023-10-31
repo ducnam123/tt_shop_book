@@ -1,14 +1,11 @@
 import React from "react";
-import {
-  useGetCategoriesQuery,
-  useGetCategoryByIdQuery,
-} from "../../api/categories";
-import { useGetProductsQuery, useGetProductByIdQuery } from "../../api/product";
+import { useGetCategoriesQuery } from "../../api/categories";
+import { useGetProductsQuery } from "../../api/product";
 import { Link } from "react-router-dom";
 
 const Card = () => {
   const { data: getCategory } = useGetCategoriesQuery();
-  const { data: getProduct } = useGetProductsQuery();
+  const { data: getProduct }: any = useGetProductsQuery();
 
   // const {data: getProductId} = useGetProductByIdQuery();
   // const {data: getCategoryId} = useGetCategoryByIdQuery(id || "");
@@ -17,7 +14,7 @@ const Card = () => {
     <section className="text-gray-600 body-font max-w-7xl mx-auto">
       <div className="container px-5 py-24 mx-auto">
         <h1 className="text-2xl font-medium title-font mb-4 text-gray-900">
-          {getCategory ? getCategory[1].name : null}
+          {getCategory ? getCategory[1]?.name : null}
         </h1>
         <div className="flex flex-wrap -m-4">
           {getProduct?.docs.map((product: any): any => {

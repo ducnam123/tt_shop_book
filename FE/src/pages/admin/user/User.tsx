@@ -106,7 +106,6 @@ const User: React.FC = () => {
       );
     }
   }, [dataUser]);
-  console.log("🚀 ~ file: User.tsx:110 ~ dataSource ~ dataSource:", dataSource);
 
   return (
     <div className="">

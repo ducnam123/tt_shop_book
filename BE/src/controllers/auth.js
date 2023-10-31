@@ -2,6 +2,7 @@ import User from "../models/auth";
 import bcrypt from "bcryptjs";
 import { signinSchema, signupSchema } from "../schemas/auth";
 import jwt from "jsonwebtoken";
+import { sendMailRegister } from '../config/emailService'
 
 export const signup = async (req, res) => {
   try {
@@ -28,6 +29,9 @@ export const signup = async (req, res) => {
       email: req.body.email,
       password: hashedPassword,
     });
+
+    // gửi email thông báo
+    sendMailRegister(user.name, user.email)
 
     // Tạo token
     const token = jwt.sign({ id: user._id }, "123456", { expiresIn: "1d" });

@@ -5,7 +5,7 @@ const authApi = createApi({
   reducerPath: "auth",
   tagTypes: ["User"],
   baseQuery: fetchBaseQuery({
-    baseUrl: `http://localhost:8080/api`,
+    baseUrl: "http://localhost:8080/api",
   }),
   endpoints: (builder) => ({
     // quản lí tài khoản

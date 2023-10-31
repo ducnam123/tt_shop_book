@@ -6,7 +6,7 @@ const categoryApi = createApi({
   reducerPath: "categoryApi",
   tagTypes: ["Category"],
   baseQuery: fetchBaseQuery({
-    baseUrl: `http://localhost:8080/api`,
+    baseUrl: "http://localhost:8080/api",
     fetchFn: async (...args) => {
       await pause(100);
       return await fetch(...args);

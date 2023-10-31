@@ -191,7 +191,6 @@ const Detail = () => {
               </a>
               hoặc
               <a href="/user/signin" className="text-[red] px-1">
-                {" "}
                 Đăng nhập
               </a>
             </p>
