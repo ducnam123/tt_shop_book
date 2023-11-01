@@ -10,13 +10,22 @@ export const checkPermission = async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
 
   jwt.verify(token, "123456", async (error, decoded) => {
-    if (error === "JsonWebTokenError") {
+    if (error && error.name === "JsonWebTokenError") {
       return res.json({
         message: "Token không hợp lệ",
       });
     }
+
+    console.log(decoded)
+
+    if (!decoded || !decoded.id) {
+      return res.json({
+        message: "Token không hợp lệ"
+      })
+    }
+
     const user = await User.findById(decoded.id);
-    if (user.role !== "admin") {
+    if (!user || user.role !== "admin") {
       return res.status(403).json({
         message: "Bạn không có quyền truy cập tài nguyên này",
       });

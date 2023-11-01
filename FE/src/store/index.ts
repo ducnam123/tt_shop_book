@@ -9,14 +9,14 @@ import {
   persistStore,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-
+import { combineReducers, configureStore, Middleware } from "@reduxjs/toolkit";
 // api
 import productApi, { productReducer } from "../../src/api/product";
 import categoryApi, { categoryReducer } from "../../src/api/categories";
 // đăng ký đăng nhập
 import authApi, { authReducer } from "../../src/api/auth";
-
-import { combineReducers, configureStore, Middleware } from "@reduxjs/toolkit";
+// đăng xuất
+import authLogout from "./authSlice";
 
 const persistConfig = {
   key: "root",
@@ -30,6 +30,7 @@ const rootReducer = combineReducers({
 
   // * user
   auth: authReducer,
+  logout: authLogout,
 });
 
 // *

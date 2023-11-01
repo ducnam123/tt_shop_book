@@ -13,6 +13,13 @@ import { Link, Outlet } from "react-router-dom";
 import type { MenuProps } from "antd";
 import { useNavigate } from "react-router-dom";
 
+// ? lấy thông tin tài khoản user
+// import saveUser from "./SaveUser";
+
+// đăng xuất tài khoản
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/authActions";
+import setLoggedOut from "../../store/authSlice";
 // tài khoản - user
 import { useSelector } from "react-redux";
 
@@ -35,23 +42,38 @@ function getItem(
   } as MenuItem;
 }
 
-const LayoutAdmin = () => {
+// chính - main
+const LayoutAdmin = React.memo(() => {
   const navigate = useNavigate();
-  // FIXME fix hiện tên tài khoản layoutAdmin header
+
+  // đăng xuất tài khoản
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    // Gọi action đăng xuất
+    dispatch(logout());
+    navigate("/");
+  };
+
+  // ? lấy thông tin tài khoản đã lưu ra
   const auth = useSelector((state: any) => {
-    const users = state.auth?.data?.user;
-    return users;
-    console.log("🚀 ~ file: LayoutAdmin.tsx:44 ~ auth ~ users:", users);
+    // Get the dynamic key (action name) from the state
+    const dynamicKey = Object.keys(state.auth.mutations)[0];
+    const authData = state.auth.mutations[dynamicKey];
+
+    // Access the data you need
+    const accessToken = authData.data.accessToken;
+    const user = authData.data.user;
+
+    return {
+      accessToken,
+      user,
+    };
   });
-
-  // const { name, role } = auth;
-
-  // console.log(name, role);
 
   // menu
   const onClick: MenuProps["onClick"] = (e) => {
-    if (e.key === "5") {
-      navigate("/");
+    if (e.key === "logout") {
+      handleLogout();
     } else {
       navigate("/");
     }
@@ -65,8 +87,8 @@ const LayoutAdmin = () => {
 
   // menu
   const items: MenuItem[] = [
-    getItem(`Tài khoản:`, "sub2", <AiOutlineUser />, [
-      getItem("Đăng xuất", "5"),
+    getItem(`Tài khoản: ${auth?.user.name}`, "sub2", <AiOutlineUser />, [
+      getItem("Đăng xuất", "logout"),
       getItem("Trang chủ", "6"),
     ]),
   ];
@@ -148,6 +170,6 @@ const LayoutAdmin = () => {
       </Layout>
     </Layout>
   );
-};
+});
 
 export default LayoutAdmin;

@@ -3,7 +3,7 @@ import { IAuth } from "../../interfaces/auth";
 import { useSignupMutation } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
 
-const SignUp = () => {
+const ForgetPassword = () => {
   const [signup, { error }]: any = useSignupMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const SignUp = () => {
     "
     >
       {contextHolder}
-      <h1 className="text-center font-bold mb-10">Đăng Ký</h1>
+      <h1 className="text-center font-bold mb-10">Lấy lại mật khẩu</h1>
       <Form
         name="basic"
         labelCol={{ span: 8 }}
@@ -45,14 +45,6 @@ const SignUp = () => {
         onFinish={onFinish}
         autoComplete="off"
       >
-        <Form.Item<IAuth>
-          label="Name"
-          name="name"
-          rules={[{ required: true, message: "Tên không được để trống!" }]}
-        >
-          <Input />
-        </Form.Item>
-
         <Form.Item<IAuth>
           label="Email"
           name="email"
@@ -65,36 +57,13 @@ const SignUp = () => {
         </Form.Item>
 
         <Form.Item<IAuth>
-          label="Password"
-          name="password"
-          rules={[
-            { required: true, message: "Password is required" },
-            { min: 6, message: "Password must be at least 6 characters" },
-          ]}
+          label="Mã bảo mật"
+          name="name"
+          rules={[{ required: true, message: "Tên không được để trống!" }]}
         >
-          <Input.Password />
+          <Input />
         </Form.Item>
 
-        {/* confirmPassword */}
-        <Form.Item<IAuth>
-          label="Confirm Password"
-          name="confirmPassword"
-          dependencies={["password"]}
-          rules={[
-            { required: true, message: "Confirm password is required" },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue("password") === value) {
-                  return Promise.resolve();
-                } else {
-                  return Promise.reject(new Error("mật khẩu không khớp"));
-                }
-              },
-            }),
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit" className="bg-blue-500">
             Submit
@@ -105,17 +74,10 @@ const SignUp = () => {
               <h1 className="text-[red] font-bold">đăng nhập!</h1>
             </a>
           </h1>
-
-          <h1 className="flex gap-1 mt-2">
-            <p>Bạn đã có tài khoản nhưng quên mật khẩu</p>
-            <a href="/user/forget">
-              <h1 className="text-[red] font-bold">lấy lại mật khẩu!</h1>
-            </a>
-          </h1>
         </Form.Item>
       </Form>
     </div>
   );
 };
 
-export default SignUp;
+export default ForgetPassword;

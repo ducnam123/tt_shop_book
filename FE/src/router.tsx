@@ -23,6 +23,7 @@ import EditCategory from "./pages/admin/categories/Edit";
 import User from "./pages/admin/user/User";
 import DetailUser from "./pages/admin/user/DetailUser";
 import EditBook from "./pages/admin/product/EditProduct";
+import ForgetPassword from "./pages/auth/ForgetPassword";
 
 // đăng nhập
 
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
       { path: "/detail/:id", element: <Detail /> },
       { path: "/user/login", element: <SignIn /> },
       { path: "/user/Signup", element: <SignUp /> },
+      { path: "/user/forget", element: <ForgetPassword /> },
     ],
   },
 
