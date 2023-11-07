@@ -1,5 +1,5 @@
 import { Button, Popconfirm, Table, message, Input } from "antd";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ICategory } from "../../../interfaces/categorys";
 import Add from "./Add";
 import {
@@ -12,26 +12,34 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useSelector } from "react-redux";
 
 const Categoryes = () => {
+  const [categoryData, getCategory]: any = useState([]);
   const user = useSelector((state: any) => state.user);
-  console.log(user);
-  const { data: categoryData } = useGetCategoriesQuery();
+  const { data } = useGetCategoriesQuery();
+
+  useEffect(() => {
+    if (data) {
+      getCategory(data);
+    }
+  }, [getCategory]);
+
   const [removeCategory, { isLoading: isRemoveLoading }] =
     useRemoveCategoryMutation();
   const [messageApi, contextHolder] = message.useMessage();
 
   const dataSource = useMemo(() => {
-    if (categoryData !== undefined) {
-      return categoryData.map(({ _id: id, name }: ICategory, index) => ({
-        key: id,
-        name,
-        index,
-      }));
+    if (categoryData !== undefined && categoryData.length > 0) {
+      return categoryData.map(
+        ({ _id: id, name }: ICategory, index: number) => ({
+          key: id,
+          name,
+          index,
+        })
+      );
     }
     return [];
   }, [categoryData]);
 
   const confirm = (id: number | string) => {
-    console.log(id);
     removeCategory(id)
       .unwrap()
       .then(() => {

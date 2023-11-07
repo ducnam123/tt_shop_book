@@ -1,8 +1,8 @@
-import User from "../models/auth";
+import User from "../../models/user/auth";
 import bcrypt from "bcryptjs";
-import { signinSchema, signupSchema } from "../schemas/auth";
+import { signinSchema, signupSchema } from "../../schemas/auth";
 import jwt from "jsonwebtoken";
-import { sendMailRegister } from '../config/emailService'
+import { sendMailRegister } from '../../config/emailService'
 
 export const signup = async (req, res) => {
   try {
@@ -125,6 +125,13 @@ export const removeUser = async (req, res) => {
 
 export const editUser = async (req, res) => {
   try {
+
+    // kiểm tra xem người dùng đã cug cấp mật khẩu hay chưa
+    if (req.body.password) {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10)
+      req.body.password = hashedPassword
+    }
+
     const user = await User.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true })
 
     return res.status(200).json({

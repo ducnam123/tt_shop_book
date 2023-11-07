@@ -1,0 +1,8 @@
+.eachslideeffect > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  height: 350px;
+  border-radius: 20px;
+}

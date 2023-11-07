@@ -13,16 +13,6 @@ import { Link, Outlet } from "react-router-dom";
 import type { MenuProps } from "antd";
 import { useNavigate } from "react-router-dom";
 
-// ? lấy thông tin tài khoản user
-// import saveUser from "./SaveUser";
-
-// đăng xuất tài khoản
-import { useDispatch } from "react-redux";
-import { logout } from "../../store/authActions";
-import setLoggedOut from "../../store/authSlice";
-// tài khoản - user
-import { useSelector } from "react-redux";
-
 const { Header, Sider, Content } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -42,38 +32,38 @@ function getItem(
   } as MenuItem;
 }
 
-// chính - main
 const LayoutAdmin = React.memo(() => {
   const navigate = useNavigate();
 
-  // đăng xuất tài khoản
-  const dispatch = useDispatch();
-  const handleLogout = () => {
-    // Gọi action đăng xuất
-    dispatch(logout());
-    navigate("/");
-  };
+  // user
+  const getUser = localStorage.getItem("userData");
+  const user = JSON.parse(getUser!);
+  const nameUser = user?.user?.name;
 
-  // ? lấy thông tin tài khoản đã lưu ra
-  const auth = useSelector((state: any) => {
-    // Get the dynamic key (action name) from the state
-    const dynamicKey = Object.keys(state.auth.mutations)[0];
-    const authData = state.auth.mutations[dynamicKey];
+  // Đăng xuất tài D
+  const logout = () => localStorage.removeItem("userData");
 
-    // Access the data you need
-    const accessToken = authData.data.accessToken;
-    const user = authData.data.user;
+  // ? lấy thông tin tài khoản đã lưu ra bằng redux
+  // const auth = useSelector((state: any) => {
+  //   // Get the dynamic key (action name) from the state
+  //   const dynamicKey = Object.keys(state.auth.mutations)[0];
+  //   const authData = state.auth.mutations[dynamicKey];
 
-    return {
-      accessToken,
-      user,
-    };
-  });
+  //   // Access the data you need
+  //   const accessToken = authData.data.accessToken;
+  //   const user = authData.data.user;
+
+  //   return {
+  //     accessToken,
+  //     user,
+  //   };
+  // });
 
   // menu
   const onClick: MenuProps["onClick"] = (e) => {
     if (e.key === "logout") {
-      handleLogout();
+      logout();
+      navigate("/admin/category");
     } else {
       navigate("/");
     }
@@ -87,11 +77,14 @@ const LayoutAdmin = React.memo(() => {
 
   // menu
   const items: MenuItem[] = [
-    getItem(`Tài khoản: ${auth?.user.name}`, "sub2", <AiOutlineUser />, [
-      getItem("Đăng xuất", "logout"),
-      getItem("Trang chủ", "6"),
-    ]),
+    getItem(
+      `Tài khoản: ${nameUser ? nameUser : "Chưa đăng nhập"}`,
+      "sub2",
+      <AiOutlineUser />,
+      [getItem("Trang chủ", "home"), getItem("Đăng xuất", "logout")]
+    ),
   ];
+
   // ------------------------------------------------------
   return (
     <Layout className="h-screen">

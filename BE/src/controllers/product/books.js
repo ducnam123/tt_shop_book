@@ -1,6 +1,6 @@
-import Book from "../models/books";
-import Category from "../models/category";
-import { bookSchema } from "../schemas/books";
+import Book from "../../models/product/books";
+import Category from "../../models/product/category";
+import { bookSchema } from "../../schemas/books";
 
 
 export const getAll = async (req, res) => {

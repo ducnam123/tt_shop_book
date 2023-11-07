@@ -13,6 +13,7 @@ const Dashboard: React.FC = () => {
     { year: "1998", value: 9 },
     { year: "1999", value: 13 },
   ];
+
   const config = {
     data,
     height: 400,

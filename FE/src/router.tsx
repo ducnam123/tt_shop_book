@@ -1,16 +1,16 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 
 // component
 import { Card, Detail } from "./components";
 
 // notpage
-import NotPage from "./components/NotPage";
+import NotPage from "./components/layout/NotPage";
 
 // client
-import Home from "./components/layout/Home";
+import Home from "./components/client/Home";
 
 // admin
-import LayoutAdmin from "./components/layout/LayoutAdmin";
+import LayoutAdmin from "./components/admin/LayoutAdmin";
 import AdminProductAdd from "./pages/admin/product/AddProduct";
 import Dashboard from "./pages/admin/Dashboard";
 
@@ -24,21 +24,18 @@ import User from "./pages/admin/user/User";
 import DetailUser from "./pages/admin/user/DetailUser";
 import EditBook from "./pages/admin/product/EditProduct";
 import ForgetPassword from "./pages/auth/ForgetPassword";
+import DetailUserHome from "./pages/auth/DetailUserHome";
+import FaqPage from "./components/faq/Faq";
+import NoPermission from "./pages/auth/NoPermission";
 
-// đăng nhập
+// check quyền
+const PrivateRoute = () => {
+  const getUser = localStorage.getItem("Auth");
+  const user = JSON.parse(getUser!);
+  const role = user?.role;
 
-// const PrivateRoute = (saveUser: any) => {
-//   const userRole: any = saveUser["saveUser"]["user"]["role"] && "admin";
-//   console.log(userRole);
-//   const navigate = useNavigate();
-//   useEffect(() => {
-//     if (userRole === "admin") {
-//       navigate("/admin/dashboard");
-//     }
-//   }, [saveUser]);
-
-//   return userRole === "admin" ? <Outlet /> : <Navigate to="/user/login" />;
-// };
+  return role === "admin" ? <Outlet /> : <Navigate to="/notAdmin" />;
+};
 
 export const router = createBrowserRouter([
   {
@@ -47,15 +44,27 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <Card /> },
       { path: "/detail/:id", element: <Detail /> },
-      { path: "/user/login", element: <SignIn /> },
-      { path: "/user/Signup", element: <SignUp /> },
-      { path: "/user/forget", element: <ForgetPassword /> },
+      { path: "faq", element: <FaqPage /> },
+      { path: "notAdmin", element: <NoPermission /> },
+
+      // đăng nhập đăng ký
+      {
+        path: "/user",
+        // element: <Home />,
+        children: [
+          { path: "login", element: <SignIn /> },
+          { path: "Signup", element: <SignUp /> },
+          { path: "forget", element: <ForgetPassword /> },
+          { path: "detail/:id", element: <DetailUserHome /> },
+        ],
+      },
     ],
   },
 
+  // admin
   {
     path: "/admin",
-    // element: <PrivateRoute isAuth={users} />,
+    element: <PrivateRoute />,
     children: [
       {
         element: <LayoutAdmin />,

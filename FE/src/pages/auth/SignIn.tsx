@@ -1,33 +1,26 @@
-import React from "react";
 import { Button, Form, Input, message } from "antd";
 import { IAuth } from "../../interfaces/auth";
 import { useSigninMutation } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
 
-//  lưu thông tin đăng nhập
-import { useDispatch } from "react-redux";
-
 const SignIn = () => {
-  const [signin, { error }] = useSigninMutation();
+  const [signin, { error }]: any = useSigninMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
 
-  // FIXME làm lưu thông tin tài khoản vào redux
-  const dispatch = useDispatch();
-
   const onFinish = async (values: any) => {
-    const user = await signin({
+    await signin({
       email: values.email,
       password: values.password,
     })
       .unwrap()
-      .then(() => {
-        // localStorage.setItem("userData", JSON.stringify(userData));
-        // console.log(userData.user.role);
+      .then((userData: any) => {
+        localStorage.setItem("Token", JSON.stringify(userData.accessToken));
+        localStorage.setItem("Auth", JSON.stringify(userData.user));
       })
 
       .then(() => {
-        // navigate("/admin/user");
+        navigate("/");
       });
   };
 
