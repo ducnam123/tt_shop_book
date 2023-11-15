@@ -1,5 +1,5 @@
 import { Button, Popconfirm, Table, message, Input } from "antd";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ICategory } from "../../../interfaces/categorys";
 import Add from "./Add";
 import {
@@ -9,35 +9,23 @@ import {
 import { Link } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import { useSelector } from "react-redux";
-
 const Categoryes = () => {
-  const [categoryData, getCategory]: any = useState([]);
-  const user = useSelector((state: any) => state.user);
   const { data } = useGetCategoriesQuery();
-
-  useEffect(() => {
-    if (data) {
-      getCategory(data);
-    }
-  }, [getCategory]);
-
   const [removeCategory, { isLoading: isRemoveLoading }] =
     useRemoveCategoryMutation();
   const [messageApi, contextHolder] = message.useMessage();
 
   const dataSource = useMemo(() => {
-    if (categoryData !== undefined && categoryData.length > 0) {
-      return categoryData.map(
-        ({ _id: id, name }: ICategory, index: number) => ({
-          key: id,
-          name,
-          index,
-        })
-      );
+    if (data !== undefined && data.length > 0) {
+      return data.map(({ _id: id, name, books }: ICategory, index: number) => ({
+        key: id,
+        name,
+        index,
+        books: books!.length,
+      }));
     }
     return [];
-  }, [categoryData]);
+  }, [data]);
 
   const confirm = (id: number | string) => {
     removeCategory(id)
@@ -62,7 +50,14 @@ const Categoryes = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: "55%",
+      width: "40%",
+      editable: true,
+    },
+    {
+      title: "Số sản phẩm có trong danh mục",
+      dataIndex: "books",
+      key: "name",
+      width: "30%",
       editable: true,
     },
     {

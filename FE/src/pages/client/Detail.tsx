@@ -3,9 +3,13 @@ import { useGetProductByIdQuery } from "../../api/product";
 import { Button, Image, Input } from "antd";
 import { Progress } from "antd";
 import { Avatar, Space } from "antd";
-import { AiOutlineUser } from "react-icons/ai";
+import { Rate } from "antd";
+import { useEffect, useState } from "react";
 
 const Detail = () => {
+  const getUser = localStorage.getItem("Auth");
+  const desc = ["terrible", "bad", "normal", "good", "wonderful"];
+  const [value, setValue] = useState(3);
   const { id } = useParams<{ id: string }>();
   const { data: getProduct }: any = useGetProductByIdQuery(id || "");
 
@@ -96,13 +100,14 @@ const Detail = () => {
             <div className="flex mt-6 items-center pb-5 border-gray-100 mb-5"></div>
             <div className="flex gap-3">
               <span className="title-font font-medium text-2xl text-gray-900 ">
-                $58.00
+                {getProduct?.price} vnđ
               </span>
 
               <del>$380</del>
               <p className="rounded-2xl px-5 bg-red-500 flex justify-center items-center">
                 -50%
               </p>
+
               <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
                 Mua
               </button>
@@ -184,16 +189,28 @@ const Detail = () => {
           </div>
 
           <div>
-            <p>
-              bạn phải là thành vithành ên mới được bình luận hãy
-              <a href="/user/signup" className="text-[red] px-1">
-                Đăng ký
-              </a>
-              hoặc
-              <a href="/user/signin" className="text-[red] px-1">
-                Đăng nhập
-              </a>
-            </p>
+            {getUser ? (
+              <span>
+                <h1 className="mb-2">Đánh giá sản phẩm:</h1>
+                <Rate tooltips={desc} onChange={setValue} value={value} />
+                {value ? (
+                  <span className="ant-rate-text">{desc[value - 1]}</span>
+                ) : (
+                  ""
+                )}
+              </span>
+            ) : (
+              <p>
+                bạn phải là thành viên mới được bình luận hãy
+                <a href="/user/signup" className="text-[red] px-1">
+                  Đăng ký
+                </a>
+                hoặc
+                <a href="/user/login" className="text-[red] px-1">
+                  Đăng nhập
+                </a>
+              </p>
+            )}
           </div>
         </div>
 

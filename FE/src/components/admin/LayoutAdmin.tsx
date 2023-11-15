@@ -36,28 +36,19 @@ const LayoutAdmin = React.memo(() => {
   const navigate = useNavigate();
 
   // user
-  const getUser = localStorage.getItem("userData");
+  const getUser = localStorage.getItem("Auth");
   const user = JSON.parse(getUser!);
-  const nameUser = user?.user?.name;
+  const nameUser = user?.name;
 
   // Đăng xuất tài D
-  const logout = () => localStorage.removeItem("userData");
+  const logout = () => {
+    const user = ["Auth", "Token"];
+    user.forEach((user) => {
+      localStorage.removeItem(user);
+    });
 
-  // ? lấy thông tin tài khoản đã lưu ra bằng redux
-  // const auth = useSelector((state: any) => {
-  //   // Get the dynamic key (action name) from the state
-  //   const dynamicKey = Object.keys(state.auth.mutations)[0];
-  //   const authData = state.auth.mutations[dynamicKey];
-
-  //   // Access the data you need
-  //   const accessToken = authData.data.accessToken;
-  //   const user = authData.data.user;
-
-  //   return {
-  //     accessToken,
-  //     user,
-  //   };
-  // });
+    navigate("/");
+  };
 
   // menu
   const onClick: MenuProps["onClick"] = (e) => {

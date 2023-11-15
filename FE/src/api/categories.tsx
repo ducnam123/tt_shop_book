@@ -7,6 +7,18 @@ const categoryApi = createApi({
   tagTypes: ["Category"],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8080/api",
+
+    //!
+    prepareHeaders(headers) {
+      const getToken = localStorage.getItem("Token");
+      const token = getToken?.slice(1, -1);
+      if (token) {
+        headers.set("Authorization", `Bearer ` + token);
+      }
+      return headers;
+    },
+
+    //!
     fetchFn: async (...args) => {
       await pause(100);
       return await fetch(...args);

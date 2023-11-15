@@ -15,6 +15,8 @@ const SignIn = () => {
     })
       .unwrap()
       .then((userData: any) => {
+        // const img = userData.user.avatar[0].url;
+        // userData.user.avatar = img;
         localStorage.setItem("Token", JSON.stringify(userData.accessToken));
         localStorage.setItem("Auth", JSON.stringify(userData.user));
       })
@@ -78,6 +80,13 @@ const SignIn = () => {
             <p>Bạn chưa có tài khoản hãy</p>{" "}
             <a href="/user/signup">
               <h1 className="text-[red] font-bold">đăng ký!</h1>
+            </a>
+          </h1>
+
+          <h1 className="flex gap-1 mt-2">
+            <p>Bạn đã có tài khoản nhưng quên mật khẩu</p>
+            <a href="/user/forget">
+              <h1 className="text-[red] font-bold">lấy lại mật khẩu!</h1>
             </a>
           </h1>
         </Form.Item>

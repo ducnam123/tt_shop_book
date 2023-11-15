@@ -1,10 +1,10 @@
-import Book from "../../models/product/books";
-import Category from "../../models/product/category";
-import { bookSchema } from "../../schemas/books";
+import Book from "../models/books";
+import Category from "../models/category";
+import { bookSchema } from "../schemas/books";
 
 
 export const getAll = async (req, res) => {
-  const { _limit = 10, _sort = "createAt", _order = "asc", _page = 1 } = req.query;
+  const { _limit = 8, _sort = "createAt", _order = "asc", _page = 1 } = req.query;
 
   const options = {
     limit: _limit,
@@ -91,6 +91,15 @@ export const update = async (req, res) => {
 };
 export const remove = async (req, res) => {
   try {
+    const bookId = req.params.id
+    const category = await Category.findOne({ books: bookId });
+    if (category) {
+      // Nếu tìm thấy danh mục, cập nhật nó để xóa _id của sản phẩm
+      category.books = category.books.filter((book) => book.toString() !== bookId);
+      await category.save(); // Lưu cập nhật
+    }
+
+
     const data = await Book.findOneAndDelete({ _id: req.params.id });
     return res.json({
       message: "Xóa sản phẩm thành công",

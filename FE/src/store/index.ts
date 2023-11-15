@@ -16,6 +16,9 @@ import productApi, { productReducer } from "../../src/api/product";
 import categoryApi, { categoryReducer } from "../../src/api/categories";
 import authApi, { authReducer } from "../../src/api/auth";
 
+// ! giỏ hàng
+import cartReducer from "./cartSlice";
+
 const persistConfig = {
   key: "root",
   storage,
@@ -37,6 +40,7 @@ const customMiddleware: Middleware[] = [
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
   reducer: persistedReducer,
+
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -47,6 +51,21 @@ export const store = configureStore({
       .concat(categoryApi.middleware)
       .concat(customMiddleware),
 });
+
+// ! để test
+// const store = configureStore({
+//   reducer: {
+//     cart: cartReducer, // Nếu bạn đang sử dụng reducer cho giỏ hàng
+//     persisted: persistedReducer,
+//   },
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware({
+//       serializableCheck: {
+//         ignoredActions: ["persist/PERSIST"], // Bạn có thể bỏ qua lỗi serializableCheck cho action persist/PERSIST
+//       },
+//     }),
+// });
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 

@@ -23,10 +23,6 @@ const DetailUserHome = () => {
 
   const userGet = localStorage.getItem("userData");
   const getuser = JSON.parse(userGet!);
-  console.log(
-    "🚀 ~ file: DetailUserHome.tsx:26 ~ DetailUserHome ~ userGet:",
-    getuser
-  );
 
   // cập nhật tài khoản
   const [updateUser, { isLoading: isUpdateLoading }] = useEditUsersMutation();
@@ -78,7 +74,7 @@ const DetailUserHome = () => {
       .then(async () => {
         console.log("Update success");
         await pause(200);
-        // navigate("/admin/user");
+        navigate("/admin/user");
       });
   };
 

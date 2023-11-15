@@ -1,5 +1,5 @@
 import Category from "../models/category";
-import { categoriSchema } from '../../schemas/category'
+import { categoriSchema } from '../schemas/category'
 
 export const getAll = async (req, res) => {
   try {
@@ -92,3 +92,36 @@ export const remove = async (req, res) => {
     });
   }
 };
+
+export const caterogy = async (req, res) => {
+  try {
+    const { categoryName } = req.query;
+
+    if (!categoryName) {
+      return res.status(400).json({
+        message: "Vui lòng cung cấp tên danh mục."
+      });
+    }
+
+    const lowerCaseCategoryName = categoryName.toLowerCase();
+    const category = await Category.findOne({ name: lowerCaseCategoryName });
+
+    if (!category) {
+      return res.status(404).json({
+        message: "không tìm thấy danh mục cần tìm"
+      })
+    }
+
+    const booksInCategory = await Book.find({ _id: { $in: category.books } });
+    return res.json({
+      message: "Danh mục và sản phẩm tìm kiếm là:",
+      category,
+      booksInCategory
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
+}

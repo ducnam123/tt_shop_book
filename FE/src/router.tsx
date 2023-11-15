@@ -27,6 +27,9 @@ import ForgetPassword from "./pages/auth/ForgetPassword";
 import DetailUserHome from "./pages/auth/DetailUserHome";
 import FaqPage from "./components/faq/Faq";
 import NoPermission from "./pages/auth/NoPermission";
+import Cart from "./pages/admin/cart/Cart";
+import Foreigncategory from "./pages/client/Foreigncategory";
+import Order from "./pages/admin/order/Order";
 
 // check quyền
 const PrivateRoute = () => {
@@ -43,10 +46,11 @@ export const router = createBrowserRouter([
     element: <Home />,
     children: [
       { path: "/", element: <Card /> },
+      { path: "/books", element: <Card /> },
       { path: "/detail/:id", element: <Detail /> },
       { path: "faq", element: <FaqPage /> },
-      { path: "notAdmin", element: <NoPermission /> },
-
+      { path: "cart", element: <Cart /> },
+      { path: "foreigncategory/:name/:id", element: <Foreigncategory /> },
       // đăng nhập đăng ký
       {
         path: "/user",
@@ -60,6 +64,8 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
+  { path: "notAdmin", element: <NoPermission /> },
 
   // admin
   {
@@ -83,6 +89,9 @@ export const router = createBrowserRouter([
           // user
           { path: "user", element: <User /> },
           { path: "user/edit/:id", element: <DetailUser /> },
+
+          // order
+          { path: "order", element: <Order /> },
         ],
       },
     ],

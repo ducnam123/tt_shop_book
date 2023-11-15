@@ -105,13 +105,6 @@ const SignUp = () => {
               <h1 className="text-[red] font-bold">đăng nhập!</h1>
             </a>
           </h1>
-
-          <h1 className="flex gap-1 mt-2">
-            <p>Bạn đã có tài khoản nhưng quên mật khẩu</p>
-            <a href="/user/forget">
-              <h1 className="text-[red] font-bold">lấy lại mật khẩu!</h1>
-            </a>
-          </h1>
         </Form.Item>
       </Form>
     </div>

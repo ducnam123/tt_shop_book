@@ -1,3 +1,5 @@
+"use strict";
+
 import { useState } from "react";
 import {
   AiFillProfile,
@@ -6,22 +8,31 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import { useGetCategoriesQuery } from "../../api/categories";
 
-const Header = () => {
+//! giỏ hàng
+type Cart = {
+  soluong: number;
+};
+// !
+
+const Header = ({ soluong }: Cart) => {
+  const { data } = useGetCategoriesQuery();
+
+  const getUser = localStorage.getItem("Auth");
+  const user = JSON.parse(getUser!);
+  const { name: nameUser, role, _id: id } = user ? user : "";
+  const img = user?.avatar[0]?.url;
   const navigate = useNavigate();
   const [menuVisible, setMenuVisible] = useState(false);
 
-  // user
-  const getUser = localStorage.getItem("Auth");
-  const user = JSON.parse(getUser!);
-  const nameUser = user?.name;
-  const img = user?.avatar[0].url;
-  const role = user?.role;
-  const id = user?._id || user?.user?.id;
-  // Đăng xuất tài khoản
+  // đăng xuất
   const logout = () => {
-    localStorage.removeItem("Auth");
-    return navigate("/");
+    const itemsToRemove = ["Auth", "Token"];
+    itemsToRemove.forEach((item) => {
+      localStorage.removeItem(item);
+    });
+    navigate("/");
   };
 
   const [isHovered, setIsHovered] = useState(false);
@@ -51,22 +62,55 @@ const Header = () => {
                 </a>
 
                 {/* menu */}
-                <AiFillProfile
-                  className="cursor-pointer text-[30px] ml-8 relative hover:block"
-                  onClick={() => setIsHovered(!isHovered)}
-                />
+                <div className="relative">
+                  <div className="flex justify-center text-center">
+                    <AiFillProfile
+                      className="cursor-pointer text-[30px] ml-8 hover:block mt-2"
+                      onClick={() => setIsHovered(!isHovered)}
+                    />
+                    <h1 className="mt-2">Danh mục</h1>
+                  </div>
 
-                <div
-                  className={`absolute ${
-                    isHovered ? "block" : "hidden"
-                  } bg-red-500 w-[240px]`}
-                >
-                  <ul>
-                    <li>menu</li>
-                    <li>menu</li>
-                    <li>menu</li>
-                    <li>menu</li>
-                  </ul>
+                  <div
+                    className={`absolute z-50 translate-x-[-70px] top-16 ${
+                      isHovered ? "block" : "hidden"
+                    } bg-white w-[140px] ml-10 rounded-md mt-4`}
+                  >
+                    <ul className="flex flex-col gap-4 my-3 ml-2 ">
+                      {data
+                        ? data.map((category: any) => {
+                            const name = category.name;
+                            const slug = name
+                              .toLowerCase()
+                              .replace(
+                                /à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,
+                                "a"
+                              )
+                              .replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e")
+                              .replace(/ì|í|ị|ỉ|ĩ/g, "i")
+                              .replace(
+                                /ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,
+                                "o"
+                              )
+                              .replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u")
+                              .replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y")
+                              .replace(/đ/g, "d")
+                              .replace(/[*+~.()'"!:@]/g, "")
+                              .replace(/\s+/g, "-");
+
+                            return (
+                              <a
+                                href={`/foreigncategory/${slug}/${category._id}`}
+                                key={category._id}
+                                className="hover:shadow-2xl hover:shadow max-w-[120px] hover:rounded-md hover:px-2 hover:py-2"
+                              >
+                                <li>{category.name}</li>
+                              </a>
+                            );
+                          })
+                        : ""}
+                    </ul>
+                  </div>
                 </div>
 
                 {/* //! search */}
@@ -130,10 +174,10 @@ const Header = () => {
                   <li className="mr-3 py-2 lg:py-0">
                     <a
                       className="flex flex-col text-grey-dark no-underline hover:text-black hover:underline py-2 px-2 items-center text-[15px] font-bold"
-                      href="#"
+                      href="/cart"
                     >
                       <AiOutlineShoppingCart className="text-[20px]" />
-                      Giỏ hàng
+                      Giỏ hàng {soluong}
                     </a>
                   </li>
                   <li className="mr-3 py-2 lg:py-0">
@@ -143,14 +187,19 @@ const Header = () => {
                     >
                       {nameUser ? (
                         <div className=" relative">
-                          <img
-                            src={img}
-                            alt=""
-                            className="rounded-full w-auto max-w-[40px] h-[40px] mx-auto"
-                          />
+                          {img !== null ? (
+                            <img
+                              src={img}
+                              alt=""
+                              className="rounded-full w-auto max-w-[40px] h-[40px] mx-auto"
+                            />
+                          ) : (
+                            <AiOutlineUser className="text-[20px] mx-auto" />
+                          )}
+
                           <h1>{nameUser}</h1>
                           <div
-                            className={`-right-16 mt-5 absolute w-[150px] shadow-2xl rounded-2xl  ${
+                            className={`-right-16 mt-5 absolute w-[150px] shadow-2xl rounded-2xl bg-white translate-x-[-50px] ${
                               menuVisible ? "block" : "hidden"
                             }`}
                           >
@@ -161,7 +210,7 @@ const Header = () => {
                             </div>
                             {role === "admin" ? (
                               <div className="rounded-2xl hover:bg-blue-500 py-2 text-center">
-                                <a href="admin/dashboard">Trang admin</a>
+                                <a href="/admin/dashboard">Trang admin</a>
                               </div>
                             ) : (
                               ""

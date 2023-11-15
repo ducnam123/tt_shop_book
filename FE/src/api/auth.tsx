@@ -14,9 +14,25 @@ const authApi = createApi({
       providesTags: ["User"],
     }),
 
-    getUserById: builder.query<IAuth, string | number>({
-      query: (id: string | number) => `/users/${id}`,
-      providesTags: ["User"],
+    // getUserById: builder.query<IAuth, string | number>({
+    //   query: (id: string | number) => `/users/${id}`,
+    //   providesTags: ["User"],
+    // }),
+
+    //! test lấy getUser = token
+    getUserById: builder.query<any, void>({
+      query: (id: any) => {
+        const getToken = localStorage.getItem("Token");
+        const token = getToken?.slice(1, -1);
+
+        return {
+          url: `/users/${id}`,
+          method: "GET",
+          headers: {
+            Authorization: "Bearer" + token,
+          },
+        };
+      },
     }),
 
     removeUsers: builder.mutation<void, number | string>({

@@ -118,16 +118,44 @@ const Editbook = () => {
       <Form.Item<IBooks>
         label="Price"
         name="price"
-        rules={[{ required: true, message: "bạn phải nhập giá tiền!" }]}
+        rules={[
+          { required: true, message: "bạn phải nhập giá tiền!" },
+          {
+            pattern: /^[0-9]{1,3}(,[0-9]{3})*(\.[0-9]{1,2})?$/,
+            message: "Phải là một số và có định dạng đúng (ví dụ: 1,000.00)",
+          },
+          {
+            validator: (_, value) => {
+              if (value < 0) {
+                return Promise.reject("Giá tiền không được là số âm!");
+              }
+              return Promise.resolve();
+            },
+          },
+        ]}
       >
         <InputNumber />
       </Form.Item>
       <Form.Item<IBooks>
         label="Original price"
         name="original_price"
-        rules={[{ required: true, message: "bạn chưa nhập giá tiền gốc" }]}
+        rules={[
+          { required: true, message: "bạn chưa nhập giá tiền gốc" },
+          {
+            pattern: /^[0-9]{1,3}(,[0-9]{3})*(\.[0-9]{1,2})?$/,
+            message: "Phải là một số và có định dạng đúng (ví dụ: 1,000.00)",
+          },
+          {
+            validator: (_, value) => {
+              if (value < 0) {
+                return Promise.reject("Giá tiền không được là số âm!");
+              }
+              return Promise.resolve();
+            },
+          },
+        ]}
       >
-        <InputNumber />
+        <Input />
       </Form.Item>
       <Form.Item<IBooks>
         label="Title"

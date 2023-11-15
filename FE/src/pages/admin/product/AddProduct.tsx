@@ -1,33 +1,20 @@
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Select,
-  Upload,
-  message,
-} from "antd";
+import { Button, Form, Input, Select, Upload, message } from "antd";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { IBooks } from "../../../interfaces/book";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // api
 import { useAddProductMutation } from "../../../api/product";
 import { useGetCategoriesQuery } from "../../../api/categories";
 
 const AdminProductAdd = () => {
-  // lấy dữ liệu ra product và category
-
   const navigate = useNavigate();
-
   const [addBook] = useAddProductMutation();
   const { data: getCategory } = useGetCategoriesQuery();
-
   const [messageApi, contextHolder] = message.useMessage();
-  const [form] = Form.useForm();
 
   // báo thêm thành công
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     const imagesUrl = values.images.map((image: any) => {
       return {
         url: image?.response?.url || image?.url || null,
@@ -39,7 +26,7 @@ const AdminProductAdd = () => {
       images: imagesUrl,
     };
 
-    addBook(updateValues)
+    await addBook(updateValues)
       .unwrap()
       .then(() =>
         messageApi.open({
@@ -50,7 +37,6 @@ const AdminProductAdd = () => {
       .then(() => {
         navigate("/admin/product");
       });
-    form.resetFields();
   };
 
   // báo lỗi nếu thất bại
@@ -95,16 +81,44 @@ const AdminProductAdd = () => {
       <Form.Item<IBooks>
         label="Price"
         name="price"
-        rules={[{ required: true, message: "bạn phải nhập giá tiền!" }]}
+        rules={[
+          { required: true, message: "bạn phải nhập giá tiền!" },
+          {
+            pattern: /^[0-9]{1,3}(,[0-9]{3})*(\.[0-9]{1,2})?$/,
+            message: "Phải là một số và có định dạng đúng (ví dụ: 1,000.00)",
+          },
+          {
+            validator: (_, value) => {
+              if (value < 0) {
+                return Promise.reject("Giá tiền không được là số âm!");
+              }
+              return Promise.resolve();
+            },
+          },
+        ]}
       >
-        <InputNumber />
+        <Input />
       </Form.Item>
       <Form.Item<IBooks>
         label="Original price"
         name="original_price"
-        rules={[{ required: true, message: "bạn chưa nhập giá tiền gốc" }]}
+        rules={[
+          { required: true, message: "bạn chưa nhập giá tiền gốc" },
+          {
+            pattern: /^[0-9]{1,3}(,[0-9]{3})*(\.[0-9]{1,2})?$/,
+            message: "Phải là một số và có định dạng đúng (ví dụ: 1,000.00)",
+          },
+          {
+            validator: (_, value) => {
+              if (value < 0) {
+                return Promise.reject("Giá tiền không được là số âm!");
+              }
+              return Promise.resolve();
+            },
+          },
+        ]}
       >
-        <InputNumber />
+        <Input />
       </Form.Item>
       <Form.Item<IBooks>
         label="Title"
@@ -166,9 +180,12 @@ const AdminProductAdd = () => {
         <Button type="primary" htmlType="submit" className="bg-blue-500 mr-2">
           Submit
         </Button>
-        <Button type="primary" htmlType="reset" className="bg-blue-400">
-          Quay lại
-        </Button>
+
+        <Link to={`/admin/product`}>
+          <Button type="primary" htmlType="reset" className="bg-blue-400">
+            Quay lại
+          </Button>
+        </Link>
       </Form.Item>
     </Form>
   );

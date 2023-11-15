@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-import Comment from "../../models/comment/comment";
-import User from "../../models/user/auth";
-import Product from "../../models/product/books";
+import Comment from "../models/comment";
+import User from "../models/auth";
+import Product from "../models/books";
 
 import { commentSchema } from "../validators/comment";
 

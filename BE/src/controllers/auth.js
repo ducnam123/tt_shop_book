@@ -1,8 +1,8 @@
-import User from "../../models/user/auth";
+import User from "../models/auth";
 import bcrypt from "bcryptjs";
-import { signinSchema, signupSchema } from "../../schemas/auth";
+import { signinSchema, signupSchema } from "../schemas/auth";
 import jwt from "jsonwebtoken";
-import { sendMailRegister } from '../../config/emailService'
+import { sendMailRegister } from '../config/emailService'
 
 export const signup = async (req, res) => {
   try {
