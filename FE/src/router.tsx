@@ -30,6 +30,7 @@ import NoPermission from "./pages/auth/NoPermission";
 import Cart from "./pages/admin/cart/Cart";
 import Foreigncategory from "./pages/client/Foreigncategory";
 import Order from "./pages/admin/order/Order";
+import SearchBook from "./pages/client/SearchBook";
 
 // check quyền
 const PrivateRoute = () => {
@@ -51,6 +52,7 @@ export const router = createBrowserRouter([
       { path: "faq", element: <FaqPage /> },
       { path: "cart", element: <Cart /> },
       { path: "foreigncategory/:name/:id", element: <Foreigncategory /> },
+      { path: "books/search", element: <SearchBook /> },
       // đăng nhập đăng ký
       {
         path: "/user",

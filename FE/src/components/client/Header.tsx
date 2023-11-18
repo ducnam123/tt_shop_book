@@ -1,5 +1,3 @@
-"use strict";
-
 import { useState } from "react";
 import {
   AiFillProfile,
@@ -9,21 +7,26 @@ import {
 } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../api/categories";
+import { useSelector } from "react-redux";
+import { Input } from "antd";
 
-//! giỏ hàng
-type Cart = {
-  soluong: number;
-};
-// !
+const Header = () => {
+  const { Search } = Input;
 
-const Header = ({ soluong }: Cart) => {
+  const navigate = useNavigate();
+
+  const onSearch = async (value: string) => {
+    const url = `/books/search?q=${value}`;
+    navigate(url);
+  };
+
+  const cartItems = useSelector((state: any) => state?.cart.cartItems);
   const { data } = useGetCategoriesQuery();
-
   const getUser = localStorage.getItem("Auth");
   const user = JSON.parse(getUser!);
   const { name: nameUser, role, _id: id } = user ? user : "";
   const img = user?.avatar[0]?.url;
-  const navigate = useNavigate();
+
   const [menuVisible, setMenuVisible] = useState(false);
 
   // đăng xuất
@@ -114,30 +117,11 @@ const Header = ({ soluong }: Cart) => {
                 </div>
 
                 {/* //! search */}
-                <div
-                  id="search-toggle"
-                  className="search-icon cursor-pointer pl-6 ml-10"
-                >
-                  <form action="" className="relative mx-auto w-max">
-                    <input
-                      type="search"
-                      className="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-lime-300 focus:pl-16 focus:pr-4"
-                    />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent stroke-gray-500 px-3.5 peer-focus:border-lime-300 peer-focus:stroke-lime-500"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  </form>
+                <div className="ml-20 mt-2 w-[400px]">
+                  <Search
+                    placeholder="Mời nhập sản phẩm cần tìm"
+                    onSearch={(value) => onSearch(value)}
+                  />
                 </div>
               </div>
 
@@ -172,13 +156,23 @@ const Header = ({ soluong }: Cart) => {
                     </a>
                   </li>
                   <li className="mr-3 py-2 lg:py-0">
-                    <a
-                      className="flex flex-col text-grey-dark no-underline hover:text-black hover:underline py-2 px-2 items-center text-[15px] font-bold"
-                      href="/cart"
-                    >
-                      <AiOutlineShoppingCart className="text-[20px]" />
-                      Giỏ hàng {soluong}
-                    </a>
+                    <div className="relative">
+                      <a
+                        className="flex flex-col text-grey-dark no-underline hover:text-black hover:underline py-2 px-2 items-center text-[15px] font-bold"
+                        href="/cart"
+                      >
+                        <AiOutlineShoppingCart className="text-[20px]" />
+                        Giỏ hàng
+                      </a>
+
+                      {cartItems.length <= 0 ? (
+                        ""
+                      ) : (
+                        <h1 className="absolute top-0 right-0 bg-blue-500 w-6 text-center rounded-full text-[white]">
+                          {cartItems.length}
+                        </h1>
+                      )}
+                    </div>
                   </li>
                   <li className="mr-3 py-2 lg:py-0">
                     <button

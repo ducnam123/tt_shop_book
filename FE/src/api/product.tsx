@@ -16,7 +16,7 @@ const productApi = createApi({
       return headers;
     },
     fetchFn: async (...arg) => {
-      await pause(10);
+      await pause(100);
       return await fetch(...arg);
     },
   }),
@@ -59,6 +59,13 @@ const productApi = createApi({
       }),
       invalidatesTags: ["Book"],
     }),
+
+    searchProduct: builder.query<any, string>({
+      query: (book) => ({
+        url: `/book/search?query=${book}`,
+        providesTags: ["Book"],
+      }),
+    }),
   }),
 });
 
@@ -69,6 +76,7 @@ export const {
   useUpdateProductMutation,
   useRemoveProductMutation,
   useGetProductsPageQuery,
+  useSearchProductQuery,
 } = productApi;
 export const productReducer = productApi.reducer;
 export default productApi;

@@ -4,14 +4,38 @@ import { Button, Image, Input } from "antd";
 import { Progress } from "antd";
 import { Avatar, Space } from "antd";
 import { Rate } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
+// ! giỏ hàng
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/cartSlice";
+// !
 const Detail = () => {
-  const getUser = localStorage.getItem("Auth");
-  const desc = ["terrible", "bad", "normal", "good", "wonderful"];
   const [value, setValue] = useState(3);
   const { id } = useParams<{ id: string }>();
+  const desc = ["terrible", "bad", "normal", "good", "wonderful"];
   const { data: getProduct }: any = useGetProductByIdQuery(id || "");
+  const getUser = localStorage.getItem("Auth");
+
+  // !giỏ hàng
+  const dispatch = useDispatch();
+  const handleBuyButtonClick = () => {
+    if (getProduct) {
+      const { _id, name, price, images, totalPrice = price } = getProduct;
+      const productToAdd = {
+        _id,
+        name,
+        price,
+        totalPrice,
+        image: images[0]?.url || "",
+        quantity: 1,
+      };
+
+      // Dispatch the addToCart action
+      dispatch(addToCart(productToAdd));
+    }
+  };
+  // !
 
   return (
     <section className="text-gray-600 body-font overflow-hidden max-w-7xl m-auto">
@@ -108,7 +132,10 @@ const Detail = () => {
                 -50%
               </p>
 
-              <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+              <button
+                className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                onClick={handleBuyButtonClick}
+              >
                 Mua
               </button>
               <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
@@ -227,12 +254,14 @@ const Detail = () => {
           </div>
 
           <div className="border mt-4">
-            <Space.Compact style={{ width: "100%" }}>
-              <Input defaultValue="mời nhập bình luận" />
-              <Button type="primary" className="bg-blue-500">
-                Submit
-              </Button>
-            </Space.Compact>
+            {getUser ? (
+              <Space.Compact style={{ width: "100%" }}>
+                <Input defaultValue="mời nhập bình luận" />
+                <Button type="primary" className="bg-blue-500">
+                  Submit
+                </Button>
+              </Space.Compact>
+            ) : null}
           </div>
         </div>
       </div>

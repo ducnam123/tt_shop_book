@@ -111,3 +111,21 @@ export const remove = async (req, res) => {
     });
   }
 };
+
+// tìm kiếm
+export const searchBooks = async (req, res) => {
+  try {
+    const { query } = req.query;
+    const data = await Book.find({
+      $or: [
+        { author: { $regex: new RegExp(query, 'i') } },
+        { name: { $regex: new RegExp(query, 'i') } },
+      ],
+    });
+    return res.json(data);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};

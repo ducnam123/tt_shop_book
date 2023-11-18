@@ -28,6 +28,7 @@ const Foreigncategory = () => {
             ? getCategory.map((category: ICategory, index: number) => {
                 return (
                   <div
+                    key={index}
                     className={
                       id === category._id
                         ? "shadow mr-4 text-[white] bg-blue-500 py-2 rounded-xl px-4"
