@@ -203,6 +203,11 @@ const Header = () => {
                                 Chi tiết tài khoản
                               </a>
                             </div>
+                            <div className="rounded-2xl hover:bg-blue-500 py-2 text-center">
+                              <a href={`/detailuser/favorite`}>
+                                SẢn phẩm yêu thích
+                              </a>
+                            </div>
                             {role === "admin" ? (
                               <div className="rounded-2xl hover:bg-blue-500 py-2 text-center">
                                 <a href="/admin/dashboard">Trang admin</a>

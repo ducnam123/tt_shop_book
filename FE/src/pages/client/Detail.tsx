@@ -1,10 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useGetProductByIdQuery } from "../../api/product";
-import { Button, Image, Input } from "antd";
-import { Progress } from "antd";
-import { Avatar, Space } from "antd";
-import { Rate } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/cartSlice";
 import {
@@ -18,10 +14,25 @@ import {
 } from "../../api/auth";
 
 // !
+import React, { useMemo } from "react";
+import {
+  Button,
+  Space,
+  notification,
+  Avatar,
+  Image,
+  Input,
+  Progress,
+  Rate,
+} from "antd";
+
+const Context = React.createContext({ name: "Default" });
+
 const Detail = () => {
   const [comment, setComment] = useState("");
   const [value, setValue] = useState(0);
   const { id } = useParams<{ id: string }>();
+  const [api, contextHolder] = notification.useNotification();
   const desc = ["terrible", "bad", "normal", "good", "wonderful"];
   const { data: getProduct }: any = useGetProductByIdQuery(id || "");
   const getUser = localStorage.getItem("Auth");
@@ -34,11 +45,25 @@ const Detail = () => {
   const setFavorite = getFavorite?.listProducts;
   const isFavorite =
     setFavorite && setFavorite.some((item: any) => item._id === id);
-  const submitFavorite = () => {
-    addFavorite(id);
+
+  // thông báo yêu thích
+  const [isFavoriteState, setIsFavoriteState] = useState(isFavorite);
+  useEffect(() => {
+    setIsFavoriteState(isFavorite);
+  }, [isFavorite]);
+  const submitFavorite = async () => {
+    await addFavorite(id);
+
+    api.info({
+      message: "Thông tin",
+      description: `Sản phẩm, ${contextValue.name}!`,
+    });
+  };
+  const contextValue = {
+    name: isFavoriteState ? "Không còn yêu thích" : "Đã thêm vào yêu thích",
   };
 
-  // ! comment
+  // comment
   const getComments = getProduct?.comments?.map((item: any) => {
     return item.commentId;
   });
@@ -92,6 +117,8 @@ const Detail = () => {
 
   return (
     <section className="text-gray-600 body-font overflow-hidden max-w-7xl m-auto">
+      <Context.Provider value={contextValue}>{contextHolder}</Context.Provider>
+
       <div className="container px-5 py-24">
         <div className="lg:w-4/5 flex flex-wrap">
           <div>
