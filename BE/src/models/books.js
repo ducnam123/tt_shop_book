@@ -64,11 +64,18 @@ const bookSchema = new mongoose.Schema(
 
     comments: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "Comment",
       },
     ],
+    favorites: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Favorite",
+      },
+    ],
   },
+
   { timestamps: true, versionKey: false }
 );
 bookSchema.plugin(mongoosePaginate);

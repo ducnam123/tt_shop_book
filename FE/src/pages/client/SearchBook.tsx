@@ -36,7 +36,7 @@ const SearchBook = () => {
                     </p>
                     <Link
                       className="text-center bg-blue-400 text-blue-700 py-2 rounded-lg font-semibold mt-4 hover:bg-blue-300 focus:scale-95 transition-all duration-200 ease-out"
-                      to={`detail/${product._id}`}
+                      to={`/detail/${product._id}`}
                     >
                       Chi tiết
                     </Link>

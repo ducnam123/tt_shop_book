@@ -1,21 +1,20 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-
 import Comment from "../models/comment";
 import User from "../models/auth";
-import Product from "../models/books";
+import Book from "../models/books";
 
-import { commentSchema } from "../validators/comment";
+import { commentSchema } from "../schemas/comment";
 
 dotenv.config();
 
 export const getAll = async (req, res) => {
   try {
-    const data = await Comment.find().populate("User").populate("feed_back");
+    const data = await Comment.find();
 
     if (!data || data.length === 0) {
       return res.status(200).json({
-        message: "Không có danh sách",
+        message: "Không có danh sách bình luận",
       });
     }
 
@@ -23,11 +22,9 @@ export const getAll = async (req, res) => {
       message: "Danh sách bình luận",
       data,
     });
-  } catch (err) {
-    console.log(err);
-
+  } catch (error) {
     return res.status(500).json({
-      message: "Lỗi khi lấy danh sách bình luận",
+      message: error.message,
     });
   }
 };
@@ -44,18 +41,18 @@ export const create = async (req, res) => {
 
     const newComment = await Comment.create({
       ...req.body,
-      user: req.user._id,
+      user: req.body.user,
       comment: req.body.comment,
     });
 
-    await Product.findByIdAndUpdate(
-      req.body.product,
+    await Book.findByIdAndUpdate(
+      req.body.book,
       { $push: { comments: newComment._id } },
       { new: true }
     );
 
     await User.findByIdAndUpdate(
-      req.user._id,
+      req.body.user,
       { $push: { comments: newComment._id } },
       { new: true }
     );
@@ -71,6 +68,7 @@ export const create = async (req, res) => {
     });
   }
 };
+
 
 export const update = async (req, res) => {
   try {
@@ -161,4 +159,25 @@ export const del = async (req, res) => {
   }
 };
 
-export const getOne = (req, res) => { };
+export const getOne = async (req, res) => {
+  try {
+    const data = await Comment.findById(req.params.id);
+
+    if (!data || data.length === 0) {
+      return res.status(200).json({
+        message: "Không có danh sách bình luận",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Danh sách bình luận",
+      data,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+

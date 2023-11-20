@@ -5,7 +5,8 @@ import cors from "cors";
 
 import {
   categoryRouter, authRouter, bookRouter,
-  cardRouter, voucherRouter, paymentRouter, cartRouter, orderRouter
+  cardRouter, voucherRouter, paymentRouter, cartRouter, orderRouter, commentRouter,
+  FeedbackRouter, favoriteRouter
 } from './routes/'
 dotenv.config()
 
@@ -25,7 +26,11 @@ app.use('/order', orderRouter)
 app.use('/payment', paymentRouter)
 app.use('/voucher', voucherRouter)
 
-
+// bình luận
+app.use('/api', commentRouter)
+app.use('/feedback', FeedbackRouter)
+// sản phẩm yêu thích
+app.use('/api', favoriteRouter)
 mongoose.connect(process.env.URI)
 
 export const viteNodeApp = app;

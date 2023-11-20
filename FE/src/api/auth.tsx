@@ -6,6 +6,14 @@ const authApi = createApi({
   tagTypes: ["User"],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8080/api",
+    prepareHeaders(headers) {
+      const getToken = localStorage.getItem("Token");
+      const token = getToken?.slice(1, -1);
+      if (token) {
+        headers.set("Authorization", `Bearer ` + token);
+      }
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
     // quản lí tài khoản
@@ -61,6 +69,35 @@ const authApi = createApi({
         body: credentials,
       }),
     }),
+
+    favoriteProducts: builder.mutation({
+      query: (id: any) => {
+        const token = localStorage.getItem("Token");
+        return {
+          url: `/favorites/${id}`,
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+      },
+      invalidatesTags: ["User"],
+    }),
+    getFavoritesByUser: builder.query<any, void>({
+      query: () => {
+        const token = localStorage.getItem("Token");
+
+        return {
+          url: `/favorites`,
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+      },
+      providesTags: ["User"],
+    }),
+
     signin: builder.mutation<
       { message: string; accessToken: string; user: any },
       IAuth
@@ -81,6 +118,8 @@ export const {
   useEditUsersMutation,
   useRemoveUsersMutation,
   useGetUserByIdQuery,
+  useGetFavoritesByUserQuery,
+  useFavoriteProductsMutation,
 } = authApi;
 export const authReducer = authApi.reducer;
 export default authApi;

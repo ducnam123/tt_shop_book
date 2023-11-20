@@ -28,12 +28,4 @@ const commentSchema = new mongoose.Schema(
   { timestamps: true, versionKey: false }
 );
 
-commentSchema.virtual("name", {
-  ref: "User",
-  localField: "user",
-  foreignField: "_id",
-  justOne: true,
-  select: "name",
-});
-
 export default mongoose.model("Comment", commentSchema);

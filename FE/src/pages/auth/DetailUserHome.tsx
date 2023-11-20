@@ -21,19 +21,11 @@ const DetailUserHome = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const userGet = localStorage.getItem("userData");
-  const getuser = JSON.parse(userGet!);
-
   // cập nhật tài khoản
   const [updateUser, { isLoading: isUpdateLoading }] = useEditUsersMutation();
   // lấy 1 tài khoản
   const { data: userData, isLoading: isGetUsersLoading } = useGetUserByIdQuery(
     id || ""
-  );
-
-  console.log(
-    "🚀 ~ file: DetailUser.tsx:41 ~ DetailUserHome ~ userData:",
-    userData
   );
 
   // thông tin form cập nhật
@@ -69,12 +61,12 @@ const DetailUserHome = () => {
     updateUser(updateValues)
       .unwrap()
       .then(async () => {
-        localStorage.setItem("userData", JSON.stringify({ updateValues }));
+        localStorage.setItem("Auth", JSON.stringify(updateValues));
       })
       .then(async () => {
         console.log("Update success");
         await pause(200);
-        navigate("/admin/user");
+        navigate("/");
       });
   };
 

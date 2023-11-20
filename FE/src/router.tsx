@@ -31,6 +31,8 @@ import Cart from "./pages/admin/cart/Cart";
 import Foreigncategory from "./pages/client/Foreigncategory";
 import Order from "./pages/admin/order/Order";
 import SearchBook from "./pages/client/SearchBook";
+import ClientUser from "./components/ClientUser";
+import Favorite from "./pages/client/Favorite ";
 
 // check quyền
 const PrivateRoute = () => {
@@ -56,12 +58,18 @@ export const router = createBrowserRouter([
       // đăng nhập đăng ký
       {
         path: "/user",
-        // element: <Home />,
         children: [
           { path: "login", element: <SignIn /> },
           { path: "Signup", element: <SignUp /> },
           { path: "forget", element: <ForgetPassword /> },
+        ],
+      },
+      {
+        path: "/detailuser",
+        element: <ClientUser />,
+        children: [
           { path: "detail/:id", element: <DetailUserHome /> },
+          { path: "favorite", element: <Favorite /> },
         ],
       },
     ],

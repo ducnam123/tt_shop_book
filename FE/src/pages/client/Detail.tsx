@@ -5,17 +5,70 @@ import { Progress } from "antd";
 import { Avatar, Space } from "antd";
 import { Rate } from "antd";
 import { useState } from "react";
-
-// ! giỏ hàng
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/cartSlice";
+import {
+  useGetCommentByIdQuery,
+  useAddCommentMutation,
+} from "../../api/comment";
+
+import {
+  useFavoriteProductsMutation,
+  useGetFavoritesByUserQuery,
+} from "../../api/auth";
+
 // !
 const Detail = () => {
-  const [value, setValue] = useState(3);
+  const [comment, setComment] = useState("");
+  const [value, setValue] = useState(0);
   const { id } = useParams<{ id: string }>();
   const desc = ["terrible", "bad", "normal", "good", "wonderful"];
   const { data: getProduct }: any = useGetProductByIdQuery(id || "");
   const getUser = localStorage.getItem("Auth");
+  const User = JSON.parse(getUser!);
+  const idUser = User._id;
+  const [addCommentMutation] = useAddCommentMutation();
+  const [addFavorite] = useFavoriteProductsMutation();
+  const { data: getFavorite } = useGetFavoritesByUserQuery();
+
+  const setFavorite = getFavorite?.listProducts;
+  const isFavorite =
+    setFavorite && setFavorite.some((item: any) => item._id === id);
+  const submitFavorite = () => {
+    addFavorite(id);
+  };
+
+  // ! comment
+  const getComments = getProduct?.comments?.map((item: any) => {
+    return item.commentId;
+  });
+  const { data: getComment } = useGetCommentByIdQuery(getComments);
+
+  //! thêm bình luận
+  const handleRateChange = (newValue: any) => {
+    setValue(newValue);
+  };
+
+  const handleCommentChange = (e: any) => {
+    setComment(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const formData = {
+        book: id,
+        stars: Number(value),
+        comment,
+        user: `${idUser}`,
+      };
+
+      await addCommentMutation(formData);
+      setValue(0);
+      setComment("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
 
   // !giỏ hàng
   const dispatch = useDispatch();
@@ -138,9 +191,12 @@ const Detail = () => {
               >
                 Mua
               </button>
-              <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+              <button
+                onClick={() => submitFavorite()}
+                className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4"
+              >
                 <svg
-                  fill="currentColor"
+                  fill={isFavorite ? "red" : "currentColor"}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
@@ -219,7 +275,11 @@ const Detail = () => {
             {getUser ? (
               <span>
                 <h1 className="mb-2">Đánh giá sản phẩm:</h1>
-                <Rate tooltips={desc} onChange={setValue} value={value} />
+                <Rate
+                  tooltips={desc}
+                  onChange={handleRateChange}
+                  value={value}
+                />
                 {value ? (
                   <span className="ant-rate-text">{desc[value - 1]}</span>
                 ) : (
@@ -241,28 +301,43 @@ const Detail = () => {
           </div>
         </div>
 
-        <div className="mt-10">
-          <div className="flex flex-col gap-3">
-            <div className="flex gap-2">
-              <Avatar src={getProduct?.images[0].url} />
-              <h1>bình luận là sách hay cho học sinh học</h1>
-            </div>
-            <div className="flex gap-2">
-              <Avatar src={getProduct?.images[0].url} />
-              <h1>bình luận là sách hay cho học sinh học</h1>
-            </div>
+        <div className="mt-10 bg-gray-400 rounded-md">
+          <div className="flex flex-col gap-3 ml-4">
+            {getComment
+              ? getComment?.data?.map((comment: any, index: number) => {
+                  return (
+                    <div className="flex gap-2 pt-4" key={index}>
+                      <Avatar src={getProduct?.images[0].url} />
+                      <div className="flex flex-col">
+                        <h1>{comment.user}</h1>
+                        <h1 className="bg-blue-500 py-3 px-10 rounded-md">
+                          {comment.comment}
+                        </h1>
+                      </div>
+                    </div>
+                  );
+                })
+              : ""}
           </div>
+        </div>
 
-          <div className="border mt-4">
-            {getUser ? (
-              <Space.Compact style={{ width: "100%" }}>
-                <Input defaultValue="mời nhập bình luận" />
-                <Button type="primary" className="bg-blue-500">
-                  Submit
-                </Button>
-              </Space.Compact>
-            ) : null}
-          </div>
+        <div className="border mt-4">
+          {getUser ? (
+            <Space.Compact style={{ width: "100%" }}>
+              <Input
+                defaultValue="mời nhập bình luận"
+                value={comment}
+                onChange={handleCommentChange}
+              />
+              <Button
+                type="primary"
+                className="bg-blue-500"
+                onClick={handleSubmit}
+              >
+                Submit
+              </Button>
+            </Space.Compact>
+          ) : null}
         </div>
       </div>
     </section>

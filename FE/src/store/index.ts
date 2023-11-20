@@ -20,6 +20,7 @@ import {
 import productApi, { productReducer } from "../../src/api/product";
 import categoryApi, { categoryReducer } from "../../src/api/categories";
 import authApi, { authReducer } from "../../src/api/auth";
+import commentApi, { commentReducer } from "../../src/api/comment.tsx";
 
 // giỏ hàng
 import cartReducer from "./cartSlice";
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   [categoryApi.reducerPath]: categoryReducer,
   auth: authReducer,
   cart: cartReducer,
+  comment: commentReducer,
 });
 
 const customMiddleware: Middleware[] = [
@@ -61,6 +63,7 @@ const store = configureStore({
   ]
     .concat(productApi.middleware)
     .concat(categoryApi.middleware)
+    .concat(commentApi.middleware)
     .concat(customMiddleware),
 });
 

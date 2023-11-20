@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/books", getAll);
 router.get("/books/:id", get);
 router.post("/books", checkPermission, create);
-router.patch("/books/:id", checkPermission, update);
+router.patch("/books/:id", update);
 router.delete("/books/:id", checkPermission, remove);
 router.get('/book/search', searchBooks);
 

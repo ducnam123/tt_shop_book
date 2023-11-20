@@ -24,7 +24,8 @@ const Header = () => {
   const { data } = useGetCategoriesQuery();
   const getUser = localStorage.getItem("Auth");
   const user = JSON.parse(getUser!);
-  const { name: nameUser, role, _id: id } = user ? user : "";
+  const { name: nameUser, role, _id } = user ? user : "";
+  const idUser = _id ? _id : user?.id;
   const img = user?.avatar[0]?.url;
 
   const [menuVisible, setMenuVisible] = useState(false);
@@ -198,7 +199,7 @@ const Header = () => {
                             }`}
                           >
                             <div className="rounded-2xl hover:bg-blue-500 py-2 text-center">
-                              <a href={`/user/detail/${id}`}>
+                              <a href={`/detailuser/detail/${idUser}`}>
                                 Chi tiết tài khoản
                               </a>
                             </div>

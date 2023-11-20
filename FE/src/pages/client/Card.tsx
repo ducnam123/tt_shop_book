@@ -4,6 +4,7 @@ import { Pagination } from "antd";
 import { useGetProductsPageQuery } from "../../api/product";
 import { useEffect, useState } from "react";
 import { Alert, Flex, Spin } from "antd";
+
 const Card = () => {
   const [paginate, setPaginate] = useState(1);
   const { data: getProduct }: any = useGetProductsPageQuery({ page: paginate });
