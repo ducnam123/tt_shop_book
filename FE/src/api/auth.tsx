@@ -22,11 +22,6 @@ const authApi = createApi({
       providesTags: ["User"],
     }),
 
-    // getUserById: builder.query<IAuth, string | number>({
-    //   query: (id: string | number) => `/users/${id}`,
-    //   providesTags: ["User"],
-    // }),
-
     //! test lấy getUser = token
     getUserById: builder.query<any, void>({
       query: (id: any) => {
@@ -108,6 +103,36 @@ const authApi = createApi({
         body: credentials,
       }),
     }),
+
+    // quên mật khẩu
+    forgotPasswordAuth: builder.mutation({
+      query: (data) => ({
+        url: `/forgot-password`,
+        method: "POST",
+        body: data.email,
+      }),
+    }),
+    resetPasswordAuth: builder.mutation({
+      query: (
+        data
+        //   : {
+        //   password: string;
+        //   randomCode: string;
+        //   randomString: string | undefined;
+        // }
+      ) => {
+        const forgotToken = localStorage.getItem("forgotToken");
+
+        return {
+          url: `/reset-password`,
+          method: "POST",
+          body: data,
+          headers: {
+            Authorization: "Bearer " + forgotToken,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -120,6 +145,8 @@ export const {
   useGetUserByIdQuery,
   useGetFavoritesByUserQuery,
   useFavoriteProductsMutation,
+  useForgotPasswordAuthMutation,
+  useResetPasswordAuthMutation,
 } = authApi;
 export const authReducer = authApi.reducer;
 export default authApi;

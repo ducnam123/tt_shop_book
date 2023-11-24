@@ -34,6 +34,8 @@ import SearchBook from "./pages/client/SearchBook";
 import ClientUser from "./components/ClientUser";
 import Favorite from "./pages/client/Favorite ";
 
+import ForgotAuth from "./pages/auth/Forgotauth";
+
 // check quyền
 const PrivateRoute = () => {
   const getUser = localStorage.getItem("Auth");
@@ -61,7 +63,8 @@ export const router = createBrowserRouter([
         children: [
           { path: "login", element: <SignIn /> },
           { path: "Signup", element: <SignUp /> },
-          { path: "forget", element: <ForgetPassword /> },
+          { path: "forget-password/:id", element: <ForgetPassword /> },
+          { path: "forgot", element: <ForgotAuth /> },
         ],
       },
       {

@@ -37,7 +37,7 @@ const Detail = () => {
   const { data: getProduct }: any = useGetProductByIdQuery(id || "");
   const getUser = localStorage.getItem("Auth");
   const User = JSON.parse(getUser!);
-  const idUser = User._id;
+  const idUser = User ? User._id : "";
   const [addCommentMutation] = useAddCommentMutation();
   const [addFavorite] = useFavoriteProductsMutation();
   const { data: getFavorite } = useGetFavoritesByUserQuery();

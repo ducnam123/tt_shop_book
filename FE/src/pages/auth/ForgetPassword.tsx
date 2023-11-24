@@ -1,19 +1,28 @@
 import { Button, Form, Input, message } from "antd";
 import { IAuth } from "../../interfaces/auth";
-import { useSignupMutation } from "../../api/auth";
-import { useNavigate } from "react-router-dom";
+import { useResetPasswordAuthMutation } from "../../api/auth";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ForgetPassword = () => {
-  const [signup, { error }]: any = useSignupMutation();
+  const param = useParams<{ id: string }>();
+  const [forget, { error }]: any = useResetPasswordAuthMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   const onFinish = async (values: any) => {
-    await signup({
-      name: values.name,
-      email: values.email,
-      password: values.password,
-      confirmPassword: values.confirmPassword,
-    })
+    console.log(
+      "🚀 ~ file: ForgetPassword.tsx:11 ~ onFinish ~ values:",
+      values
+    );
+
+    values.randomString = param.id;
+
+    // await forget({
+    //   name: values.name,
+    //   email: values.email,
+    //   password: values.password,
+    //   confirmPassword: values.confirmPassword,
+    // })
+    forget(values)
       .unwrap()
       .then(() => {
         navigate("/user/login");
@@ -46,19 +55,16 @@ const ForgetPassword = () => {
         autoComplete="off"
       >
         <Form.Item<IAuth>
-          label="Email"
-          name="email"
-          rules={[
-            { required: true, message: "Email is required" },
-            { type: "email", message: "Invalid email format" },
-          ]}
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: "Email is required" }]}
         >
-          <Input />
+          <Input.Password />
         </Form.Item>
 
-        <Form.Item<IAuth>
+        <Form.Item<any>
           label="Mã bảo mật"
-          name="name"
+          name="randomCode"
           rules={[{ required: true, message: "Tên không được để trống!" }]}
         >
           <Input />
