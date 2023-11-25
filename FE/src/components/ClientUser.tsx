@@ -36,7 +36,7 @@ const App = () => {
       <AiFillAmazonCircle />
     ),
     getItem(
-      <Link to="https://ant.design" target="_blank" rel="noopener noreferrer">
+      <Link to="#" target="_blank" rel="noopener noreferrer">
         Quản lí đơn hàng
       </Link>,
       "link",
@@ -44,7 +44,6 @@ const App = () => {
     ),
   ];
 
-  const [mode, setMode] = useState<"vertical" | "inline">("inline");
   const [theme, setTheme] = useState<MenuTheme>("light");
 
   const changeTheme = (value: boolean) => {
@@ -63,7 +62,6 @@ const App = () => {
           style={{ width: 256 }}
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={["sub1"]}
-          mode={mode}
           theme={theme}
           items={items}
         />

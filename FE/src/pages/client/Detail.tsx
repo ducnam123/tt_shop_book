@@ -14,7 +14,7 @@ import {
 } from "../../api/auth";
 
 // !
-import React, { useMemo } from "react";
+import React from "react";
 import {
   Button,
   Space,
@@ -52,12 +52,19 @@ const Detail = () => {
     setIsFavoriteState(isFavorite);
   }, [isFavorite]);
   const submitFavorite = async () => {
-    await addFavorite(id);
+    if (User !== undefined) {
+      api.error({
+        message: "Bạn chưa đăng nhập",
+        description: `Bạn cần đăng nhập để thêm vào sản phẩm yêu thích!`,
+      });
+    } else {
+      api.info({
+        message: "Thông tin",
+        description: `Sản phẩm, ${contextValue.name}!`,
+      });
+    }
 
-    api.info({
-      message: "Thông tin",
-      description: `Sản phẩm, ${contextValue.name}!`,
-    });
+    await addFavorite(id);
   };
   const contextValue = {
     name: isFavoriteState ? "Không còn yêu thích" : "Đã thêm vào yêu thích",

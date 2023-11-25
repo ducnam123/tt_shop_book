@@ -64,7 +64,7 @@ export const router = createBrowserRouter([
           { path: "login", element: <SignIn /> },
           { path: "Signup", element: <SignUp /> },
           { path: "forget-password/:id", element: <ForgetPassword /> },
-          { path: "forgot", element: <ForgotAuth /> },
+          { path: "forget", element: <ForgotAuth /> },
         ],
       },
       {

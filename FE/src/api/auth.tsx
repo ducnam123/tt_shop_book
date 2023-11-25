@@ -106,10 +106,10 @@ const authApi = createApi({
 
     // quên mật khẩu
     forgotPasswordAuth: builder.mutation({
-      query: (data) => ({
+      query: (email) => ({
         url: `/forgot-password`,
         method: "POST",
-        body: data.email,
+        body: email,
       }),
     }),
     resetPasswordAuth: builder.mutation({
