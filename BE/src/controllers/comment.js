@@ -159,59 +159,9 @@ export const del = async (req, res) => {
   }
 };
 
-
-export const getComment = async (req, res) => {
-  try {
-    const data = await Comment.findById(req.params.id)
-    if (!data || data.length === 0) {
-      return res.status(200).json({
-        message: "Không có danh sách bình luận",
-      });
-    }
-
-    return res.status(200).json({
-      // message: "Danh sách comment",
-      data,
-    });
-
-  } catch (error) {
-    return res.status(500).json({
-      message: error.message,
-    });
-  }
-};
-
-// ----------------------------------------------------------------
 export const getOne = async (req, res) => {
   try {
-    const data = await Book.findById(req.params.id)
-    const getComment = data.comments
-
-
-    const getComments = await Promise.all(getComment.map(async (comment) => {
-      if (comment) {
-        const commentData = await Comment.findById(comment);
-        if (commentData) {
-          const userData = await User.findById(commentData.user)
-          // return userData.avatar
-          return {
-            id: commentData._id.toHexString(),
-            avatar: userData.avatar,
-            user: userData ? userData.name : 'Người dùng không xác định',
-            comment: commentData.comment,
-            createdAt: commentData.createdAt,
-          };
-        } else {
-          return null;
-        }
-      }
-    }));
-
-    if (!data || data.length === 0) {
-      return res.status(200).json({
-        message: "Không có danh sách bình luận",
-      });
-    }
+    const data = await Comment.findById(req.params.id);
 
     if (!data || data.length === 0) {
       return res.status(200).json({
@@ -220,15 +170,14 @@ export const getOne = async (req, res) => {
     }
 
     return res.status(200).json({
-      getComments,
+      message: "Danh sách bình luận",
+      data,
     });
-
   } catch (error) {
     return res.status(500).json({
       message: error.message,
     });
   }
 };
-
 
 
