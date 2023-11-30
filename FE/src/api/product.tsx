@@ -16,7 +16,7 @@ const productApi = createApi({
       return headers;
     },
     fetchFn: async (...arg) => {
-      await pause(100);
+      await pause(0);
       return await fetch(...arg);
     },
   }),

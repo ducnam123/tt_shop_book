@@ -42,10 +42,30 @@ const Detail = () => {
   const [addFavorite] = useFavoriteProductsMutation();
   const { data: getFavorite } = useGetFavoritesByUserQuery();
 
+  const formatTimeAgo = (isoString: Date) => {
+    const now: Date = new Date();
+    const createdAt: Date = new Date(isoString);
+    const timeDifference: number = now.getTime() - createdAt.getTime();
+    const daysAgo: number = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+    if (daysAgo === 0) {
+      return "Hôm nay";
+    } else if (daysAgo === 1) {
+      return "Hôm qua";
+    } else if (daysAgo <= 30) {
+      return `${daysAgo} ngày trước`;
+    } else {
+      const formattedDate = `${createdAt.getDate()}/${
+        createdAt.getMonth() + 1
+      }/${createdAt.getFullYear()}`;
+      return formattedDate;
+    }
+  };
+
   const setFavorite = getFavorite?.listProducts;
   const isFavorite =
     setFavorite && setFavorite.some((item: any) => item._id === id);
-
+  console.log("🚀 ~ file: Detail.tsx:47 ~ Detail ~ isFavorite:", isFavorite);
   // thông báo yêu thích
   const [isFavoriteState, setIsFavoriteState] = useState(isFavorite);
   useEffect(() => {
@@ -71,10 +91,7 @@ const Detail = () => {
   };
 
   // comment
-  const getComments = getProduct?.comments?.map((item: any) => {
-    return item.commentId;
-  });
-  const { data: getComment } = useGetCommentByIdQuery(getComments);
+  const { data: getComment } = useGetCommentByIdQuery(id!);
 
   //! thêm bình luận
   const handleRateChange = (newValue: any) => {
@@ -181,32 +198,6 @@ const Detail = () => {
                 <p>tiêu đề:{getProduct?.title}</p>
                 <p>miêu tả: {getProduct?.description}</p>
               </div>
-
-              <span className="flex items-center">
-                <svg
-                  fill="currentColor"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-4 h-4 text-indigo-500"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <svg
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-4 h-4 text-indigo-500"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <span className="text-gray-600 ml-3">(4 nhận xét)</span>
-              </span>
             </div>
             <div className="flex mt-6 items-center pb-5 border-gray-100 mb-5"></div>
             <div className="flex gap-3">
@@ -335,23 +326,36 @@ const Detail = () => {
           </div>
         </div>
 
-        <div className="mt-10 bg-gray-400 rounded-md">
+        <div className="mt-10 bg-white text-black rounded-md pb-5">
+          <h1 className="text-2xl  ml-5 my-10:">Bình luận sản phẩm</h1>
           <div className="flex flex-col gap-3 ml-4">
-            {getComment
-              ? getComment?.data?.map((comment: any, index: number) => {
-                  return (
-                    <div className="flex gap-2 pt-4" key={index}>
-                      <Avatar src={getProduct?.images[0].url} />
-                      <div className="flex flex-col">
-                        <h1>{comment.user}</h1>
-                        <h1 className="bg-blue-500 py-3 px-10 rounded-md">
-                          {comment.comment}
-                        </h1>
+            {getComment || getComment > 0 ? (
+              getComment?.getComments?.map((comment: any, index: number) => {
+                console.log(comment);
+                return (
+                  <div className="flex gap-2 pt-4" key={index}>
+                    <Avatar src={comment?.avatar[0]?.url} />
+                    <div className="flex flex-col">
+                      <h1 className="font-bold">{comment?.user}</h1>
+
+                      <div className="">
+                        <h1 className=" rounded-md">{comment?.comment}</h1>
+                        <div className="flex gap-1">
+                          <h1> {formatTimeAgo(comment?.createdAt)} </h1>⋅
+                          <button className="hover:text-blue-500">Thích</button>
+                          ⋅
+                          <button className="hover:text-blue-500">
+                            Trả lời
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  );
-                })
-              : ""}
+                  </div>
+                );
+              })
+            ) : (
+              <div className="ml-2 my-4">Chưa có bình luận nào</div>
+            )}
           </div>
         </div>
 

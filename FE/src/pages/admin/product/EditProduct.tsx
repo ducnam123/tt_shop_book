@@ -10,8 +10,6 @@ import {
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { IBooks } from "../../../interfaces/book";
 import { useNavigate, useParams } from "react-router-dom";
-
-// api
 import {
   useUpdateProductMutation,
   useGetProductByIdQuery,
@@ -20,9 +18,7 @@ import { useGetCategoriesQuery } from "../../../api/categories";
 import { useEffect } from "react";
 
 const Editbook = () => {
-  // lấy dữ liệu ra product và category
   const { id } = useParams<{ id: string }>();
-  // useParams<{ id: string }>();
 
   const navigate = useNavigate();
 
@@ -41,7 +37,7 @@ const Editbook = () => {
       author: getProduct?.author,
       title: getProduct?.title,
       images: getProduct?.images,
-      categoryId: getProduct?.categoryId?.name,
+      categoryId: getProduct?.categoryId?._id,
       description: getProduct?.description,
     });
   }, [getProduct]);
@@ -74,7 +70,6 @@ const Editbook = () => {
     form.resetFields();
   };
 
-  // báo lỗi nếu thất bại
   const onFinishFailed = (errorInfo: any) => {
     messageApi.open({
       type: "error",
@@ -121,10 +116,6 @@ const Editbook = () => {
         rules={[
           { required: true, message: "bạn phải nhập giá tiền!" },
           {
-            pattern: /^[0-9]{1,3}(,[0-9]{3})*(\.[0-9]{1,2})?$/,
-            message: "Phải là một số và có định dạng đúng (ví dụ: 1,000.00)",
-          },
-          {
             validator: (_, value) => {
               if (value < 0) {
                 return Promise.reject("Giá tiền không được là số âm!");
@@ -141,10 +132,6 @@ const Editbook = () => {
         name="original_price"
         rules={[
           { required: true, message: "bạn chưa nhập giá tiền gốc" },
-          {
-            pattern: /^[0-9]{1,3}(,[0-9]{3})*(\.[0-9]{1,2})?$/,
-            message: "Phải là một số và có định dạng đúng (ví dụ: 1,000.00)",
-          },
           {
             validator: (_, value) => {
               if (value < 0) {
@@ -182,11 +169,15 @@ const Editbook = () => {
       </Form.Item>
       <Form.Item<any>
         label="Danh mục"
-        name="categoryId"
+        name={"categoryId"}
         rules={[{ required: true, message: "bạn chưa chọn danh mục cho sách" }]}
       >
         <Select>
           {getCategory?.map((items: any) => {
+            console.log(
+              "🚀 ~ file: EditProduct.tsx:191 ~ {getCategory?.map ~ items:",
+              items
+            );
             return (
               <Select.Option key={items._id} value={items._id}>
                 {items.name}

@@ -8,4 +8,5 @@ export interface IBooks {
   description?: string;
   author?: string;
   categoryId?: string;
+  _id?: string;
 }
