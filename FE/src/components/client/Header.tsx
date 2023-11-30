@@ -66,9 +66,9 @@ const Header = () => {
                 </a>
 
                 {/* menu */}
-                <div className="relative bg-gray-500 pr-7 pb-1 mt-2  ml-4">
+                <div className="relative bg-gray-400 pr-7 pb-1 mt-2  ml-4">
                   <div
-                    className="flex justify-center text-center cursor-pointer "
+                    className={`flex justify-center text-center cursor-pointer`}
                     onClick={() => setIsHovered(!isHovered)}
                   >
                     <AiFillProfile className="text-[30px] ml-8 hover:block mt-2 text-white" />
@@ -177,7 +177,7 @@ const Header = () => {
                   </li>
                   <li className="mr-3 py-2 lg:py-0 bg-gray-400 rounded-sm">
                     <button
-                      className="flex flex-col text-grey-dark no-underline hover:text-black hover:underline py-2 px-2 items-center text-[15px] font-bold text-white"
+                      className="flex flex-col text-grey-dark no-underline hover:text-black hover:underline py-2 px-2 items-center text-[15px] font-bold "
                       onClick={() => setMenuVisible(!menuVisible)}
                     >
                       {nameUser ? (
@@ -192,9 +192,9 @@ const Header = () => {
                             <AiOutlineUser className="text-[20px] mx-auto" />
                           )}
 
-                          <h1>{nameUser}</h1>
+                          <h1 className="text-white">{nameUser}</h1>
                           <div
-                            className={`-right-16 mt-5 absolute w-[150px] shadow-2xl rounded-2xl bg-white translate-x-[-50px] ${
+                            className={`-right-16 mt-5 absolute w-[150px] shadow-2xl rounded-2xl bg-white translate-x-[-35px] ${
                               menuVisible ? "block" : "hidden"
                             }`}
                           >

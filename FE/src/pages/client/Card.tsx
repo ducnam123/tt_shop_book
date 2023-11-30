@@ -1,21 +1,15 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Example from "../slideShow/SlideShow";
 import { Pagination } from "antd";
-import {
-  useGetProductByIdQuery,
-  useGetProductsPageQuery,
-} from "../../api/product";
+import { useGetProductsPageQuery } from "../../api/product";
 import { useGetCategoriesQuery } from "../../api/categories";
 import { useEffect, useState } from "react";
 import { Alert, Flex, Spin } from "antd";
+import CategoryHome from "./CategoryHome";
 
 const Card = () => {
   const [paginate, setPaginate] = useState(1);
   const { data: Category } = useGetCategoriesQuery();
-
-  const { data: getProductss } = useGetProductByIdQuery();
-
-  console.log(getProductss);
 
   const { data: getProduct }: any = useGetProductsPageQuery({ page: paginate });
   const navigate = useNavigate();
@@ -56,7 +50,12 @@ const Card = () => {
                   <p className="text-[#c92127] text-lg font-bold">
                     {product.price}đ
                   </p>
-                  <del>{product.original_price}đ</del>
+                  <div className=" ">
+                    <del>{product.original_price}đ</del>
+                    <span className="float-right mr-1 bg-blue-400 py-1 px-3 text-white  ">
+                      5 ⭐
+                    </span>
+                  </div>
 
                   <Link
                     className="text-center bg-blue-400 text-blue-700 py-2 rounded-lg font-semibold mt-4 hover:bg-blue-300 focus:scale-95 transition-all duration-200 ease-out"
@@ -96,17 +95,7 @@ const Card = () => {
         )}
       </div>
 
-      {/* danh mục và sản phẩm */}
-      <div>
-        {Category?.map((category) => {
-          console.log(
-            "🚀 ~ file: Card.tsx:100 ~ {Category?.map ~ category:",
-            category
-          );
-
-          return <div>{category.name}</div>;
-        })}
-      </div>
+      <CategoryHome data={Category} />
     </section>
   );
 };

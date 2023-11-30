@@ -37,6 +37,7 @@ const Detail = () => {
   const { data: getProduct }: any = useGetProductByIdQuery(id || "");
   const getUser = localStorage.getItem("Auth");
   const User = JSON.parse(getUser!);
+  console.log("🚀 ~ file: Detail.tsx:40 ~ Detail ~ User:", User);
   const idUser = User ? User._id : "";
   const [addCommentMutation] = useAddCommentMutation();
   const [addFavorite] = useFavoriteProductsMutation();
@@ -65,20 +66,20 @@ const Detail = () => {
   const setFavorite = getFavorite?.listProducts;
   const isFavorite =
     setFavorite && setFavorite.some((item: any) => item._id === id);
-  console.log("🚀 ~ file: Detail.tsx:47 ~ Detail ~ isFavorite:", isFavorite);
   // thông báo yêu thích
   const [isFavoriteState, setIsFavoriteState] = useState(isFavorite);
   useEffect(() => {
     setIsFavoriteState(isFavorite);
   }, [isFavorite]);
+  console.log(User);
   const submitFavorite = async () => {
-    if (User !== undefined) {
+    if (User == undefined) {
       api.error({
         message: "Bạn chưa đăng nhập",
         description: `Bạn cần đăng nhập để thêm vào sản phẩm yêu thích!`,
       });
     } else {
-      api.info({
+      api.success({
         message: "Thông tin",
         description: `Sản phẩm, ${contextValue.name}!`,
       });
@@ -99,6 +100,9 @@ const Detail = () => {
   };
 
   const handleCommentChange = (e: any) => {
+    setComment(e.target.value);
+  };
+  const handleKeyPress = (e: any) => {
     setComment(e.target.value);
   };
 
@@ -359,17 +363,22 @@ const Detail = () => {
           </div>
         </div>
 
-        <div className="border mt-4">
+        <div className="border mt-4 ">
           {getUser ? (
-            <Space.Compact style={{ width: "100%" }}>
+            <Space.Compact
+              style={{ width: "100%" }}
+              className="bg-gray-300 py-5 px-8 rounded-xl"
+            >
               <Input
+                className="h-[50px] text-black"
                 defaultValue="mời nhập bình luận"
                 value={comment}
                 onChange={handleCommentChange}
+                onKeyDown={handleKeyPress}
               />
               <Button
                 type="primary"
-                className="bg-blue-500"
+                className="bg-blue-500 h-[50px]"
                 onClick={handleSubmit}
               >
                 Submit
