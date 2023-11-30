@@ -66,13 +66,13 @@ const Header = () => {
                 </a>
 
                 {/* menu */}
-                <div className="relative">
-                  <div className="flex justify-center text-center">
-                    <AiFillProfile
-                      className="cursor-pointer text-[30px] ml-8 hover:block mt-2"
-                      onClick={() => setIsHovered(!isHovered)}
-                    />
-                    <h1 className="mt-2">Danh mục</h1>
+                <div className="relative bg-gray-500 pr-7 pb-1 mt-2  ml-4">
+                  <div
+                    className="flex justify-center text-center cursor-pointer "
+                    onClick={() => setIsHovered(!isHovered)}
+                  >
+                    <AiFillProfile className="text-[30px] ml-8 hover:block mt-2 text-white" />
+                    <h1 className="mt-2 text-white">Danh mục</h1>
                   </div>
 
                   <div
@@ -175,14 +175,14 @@ const Header = () => {
                       )}
                     </div>
                   </li>
-                  <li className="mr-3 py-2 lg:py-0">
+                  <li className="mr-3 py-2 lg:py-0 bg-gray-400 rounded-sm">
                     <button
-                      className="flex flex-col text-grey-dark no-underline hover:text-black hover:underline py-2 px-2 items-center text-[15px] font-bold"
+                      className="flex flex-col text-grey-dark no-underline hover:text-black hover:underline py-2 px-2 items-center text-[15px] font-bold text-white"
                       onClick={() => setMenuVisible(!menuVisible)}
                     >
                       {nameUser ? (
                         <div className=" relative">
-                          {img !== null ? (
+                          {img !== null && img > 0 ? (
                             <img
                               src={img}
                               alt=""

@@ -9,9 +9,8 @@ import {
   AiFillDollarCircle,
 } from "react-icons/ai";
 import { Layout, Menu, Button, theme } from "antd";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
-import { useNavigate } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
 
